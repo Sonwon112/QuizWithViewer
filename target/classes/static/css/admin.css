@@ -1,0 +1,11 @@
+@charset "UTF-8";
+
+#participantList{
+	height:300px;
+	overflow-y:auto;
+}
+
+#participantListElement{
+	display: flex;
+	flex:auto;
+}

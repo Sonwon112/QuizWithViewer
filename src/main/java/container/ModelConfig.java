@@ -3,6 +3,8 @@ package container;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import repository.QuizRoomRepository;
 import service.ParticipantService;
 import service.QuizRoomService;
@@ -23,6 +25,11 @@ public class ModelConfig {
 	@Bean
 	public ParticipantService submitAnswerService() {
 		return new ParticipantService();
+	}
+	
+	@Bean
+	public ObjectMapper mapper() {
+		return new ObjectMapper();
 	}
 	
 }

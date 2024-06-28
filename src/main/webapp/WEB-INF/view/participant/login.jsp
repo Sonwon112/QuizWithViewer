@@ -14,14 +14,17 @@
 		방 번호 :
 		<input type="text" name="roomNum" placeholder="방 번호를 입력해주세요"/>
 		</label>
+		<br>
 		<label>
 		비밀번호 :
 		<input type="password" name="password" placeholder="방 번호를 입력해주세요"/>
 		</label>
+		<br>
 		<label>
 		닉네임 :
 		<input type="text" name="nickname" placeholder="채팅창 닉네임과 맞춰주세요"/>
 		</label>
+		<br>
 		<input type="submit">
 	</form>
 </div>
