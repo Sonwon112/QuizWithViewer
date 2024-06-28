@@ -1,8 +1,11 @@
 package model;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+
+import org.springframework.web.socket.WebSocketSession;
 
 import customEnum.QuizMode;
 
@@ -16,6 +19,7 @@ public class QuizRoom {
 	private String roomNum;
 	private String password;
 	private Map<Integer,Participant> participantMap = new HashMap<>();
+	private int participantLastNum = 0;
 	private int currParticipantNum = 0;
 	private QuizMode currMode = QuizMode.DEFAULT;
 	private String currQuestion;
@@ -42,16 +46,20 @@ public class QuizRoom {
 		this.roomNum = roomNum;
 	}
 
-	public Map<Integer,Participant> getParticipantList() {
+	public Map<Integer,Participant> getParticipantMap() {
 		return participantMap;
 	}
 	
-	public void addParticipantToList(Participant participant) {
-		participantMap.put(++currParticipantNum, participant);
+	public void addParticipantToMap(Participant participant) {
+		currParticipantNum+=1;
+		participantLastNum = currParticipantNum;
+		participant.setPartId(participantLastNum);
+		participantMap.put(participantLastNum, participant);
 	}
 	
-	public void removeParticipantToList(int id) {
+	public void removeParticipantToMap(int id) {
 		participantMap.remove(id);
+		currParticipantNum-=1;
 	}
 
 	public QuizMode getCurrMode() {
@@ -78,5 +86,12 @@ public class QuizRoom {
 		this.currAnswer = currAnswer;
 	}
 	
+	public void CompareAnswer() {
+		participantMap.forEach((i,p)->{
+			if(!p.getAnswer().equals(currAnswer)) {
+				p.setPart(false);
+			}
+		});
+	}
 	
 }

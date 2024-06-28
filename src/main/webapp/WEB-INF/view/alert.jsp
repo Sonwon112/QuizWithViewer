@@ -12,7 +12,11 @@
 		var msg = "<c:out value='${msg}'/>";
 		var url = "<c:out value='${url}'/>";
 		alert(msg);
-		location.href=url;
+		if(url === "backPage"){
+			history.go(-1);	
+		}else{
+			location.href=url;	
+		}
 	</script>
 </body>
 </html>

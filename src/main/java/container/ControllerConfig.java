@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 
 import controller.AdminController;
 import controller.OverlayController;
+import controller.StompController;
 import controller.ViewerController;
 
 @Configuration
@@ -23,6 +24,11 @@ public class ControllerConfig {
 	@Bean
 	public ViewerController viewerController() {
 		return new ViewerController();
+	}
+	
+	@Bean
+	public StompController stompController() {
+		return new StompController();
 	}
 	
 }

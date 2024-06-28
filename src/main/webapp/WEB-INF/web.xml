@@ -18,9 +18,11 @@
 			<param-value>container.MvcConfig
 						 container.ModelConfig
 						 container.ControllerConfig
+						 container.WebSocketConfig
 			</param-value>
 		</init-param>
 		<load-on-startup>1</load-on-startup>
+		<async-supported>true</async-supported>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>dispatcher</servlet-name>
@@ -29,7 +31,8 @@
 	<filter>
 		<filter-name>encodingFilter</filter-name><!-- 오픈 소스에서 제공하는 CharacterEncodingFilter 
 			객체 -->
-		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+		<!--  <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>-->
+		<filter-class>org.apache.catalina.filters.SetCharacterEncodingFilter</filter-class>
 		<init-param>
 			<param-name>encoding</param-name>
 			<param-value>UTF-8</param-value>
