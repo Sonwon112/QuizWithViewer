@@ -15,11 +15,15 @@ public class QuizRoom {
 	
 	private String roomNum;
 	private String password;
+	private boolean isAllowParticipant = false;
+	
 	private Map<Integer,Participant> participantMap = new HashMap<>();
 	private int participantLastNum = 0;
 	private int currParticipantNum = 0;
+	
 	private QuizMode currMode = QuizMode.DEFAULT;
 	private Quiz currQuiz;
+	private int currQuizNum;
 	
 	public QuizRoom(String password) {
 		roomNum = rand.ints(leftLimit, rightLimit+1)
@@ -81,6 +85,22 @@ public class QuizRoom {
 				p.setPart(false);
 			}
 		});
+	}
+
+	public int getCurrQuizNum() {
+		return currQuizNum;
+	}
+
+	public void updateCurrQuizNum() {
+		currQuizNum+=1;
+	}
+
+	public boolean isAllowParticipant() {
+		return isAllowParticipant;
+	}
+
+	public void setAllowParticipant(boolean isAllowParticipant) {
+		this.isAllowParticipant = isAllowParticipant;
 	}
 	
 }

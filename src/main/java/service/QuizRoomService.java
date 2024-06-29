@@ -1,5 +1,7 @@
 package service;
 
+import java.lang.module.FindException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -49,10 +51,20 @@ public class QuizRoomService {
 		qr.addParticipantToMap(participant);
 	}
 	
+	/**
+	 * 방의 문제 출제 모드를 변경하는 함수
+	 * @param roomNum
+	 * @param mode
+	 */
 	public void changeQuizRoomMode(String roomNum, QuizMode mode) {
 		QuizRoom qr = findQuizRoomByRoomNum(roomNum);
 		qr.setCurrMode(mode);
 	}
-
+	
+	public void changeParticipantState(String roomNum, boolean state) {
+		QuizRoom qr = findQuizRoomByRoomNum(roomNum);
+		qr.setAllowParticipant(state);
+	}
+	
 	
 }

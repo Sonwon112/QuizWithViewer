@@ -16,6 +16,7 @@
 			<p>방 번호 : ${quizRoom.roomNum}</p>
 			<p>비밀번호 : ${quizRoom.password}</p>
 			<p>오버레이 url : 146.56.102.79:8080/overlay?room=${quizRoom.roomNum}</p>
+			<p>참여 페이지 url : 146.56.102.79:8080/participant</p>
 			<div class="outline">
 				<div class="box inner">
 					<div class="subtitle">문제</div>
@@ -51,6 +52,15 @@
 
 				<div class="box inner" id="participantList">
 					<div class="subtitle">참여자 목록</div>
+					<div class="inline-block">
+						<div class="left">
+							<input type="checkbox" id="toggle" hidden onclick="changeParticipantState()">
+							<label for="toggle" class="toggleSwitch">
+								<span class="toggleButton"></span>
+							</label>
+						</div>
+						<div class="left" id="participantState">비활성화</div>
+					</div>
 					<hr>
 				</div>
 			</div>
@@ -147,17 +157,6 @@
 					});
 				});
 
-				window.onbeforeunload = function () {
-					// console.log("새로고침");/
-					// let data = {
-					// 	"roomNum": roomNum,
-					// 	"partId": "-1",
-					// 	"type": "lost",
-					// 	"msg": "lost Participation"
-					// };
-					// stompClient.send("/app/lostConnection", {}, JSON.stringify(data))
-					// stompClient.close();
-				}
 
 				function addParticipant(participant) {
 					//console.log(typeof (participant));
@@ -174,11 +173,31 @@
 
 				function changeQuiz(quiz) {
 					let quizJSON = JSON.parse(quiz)
-					let question = "난이도 : "+quizJSON.difficulty+"<br>"+quizJSON.question
-					let answer = "정답 : "+quizJSON.answer;
+					let answer = "정답 : " + quizJSON.answer;
+					let question = "난이도 : " + quizJSON.difficulty + "<br>" + quizJSON.num + ". " + quizJSON.question
 
 					$("#questionBox").html(question);
 					$("#answerBox").text(answer);
+				}
+
+				function changeParticipantState() {
+					let isChecked = $("#toggle").is(":checked");
+					switch (isChecked) {
+						case true:
+							$("#participantState").text("활성화 중...")
+							break;
+						case false:
+							$("#participantState").text("비활성화")
+							break;
+					}
+
+					let data = {
+						"roomNum": roomNum,
+						"partId": "-1",
+						"type": "changeState",
+						"msg": isChecked
+					};
+					stompClient.send("/app/changeParticipantState", {}, JSON.stringify(data));
 				}
 
 				function sendOut() {

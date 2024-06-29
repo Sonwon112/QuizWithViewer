@@ -88,6 +88,12 @@ public class StompController {
 		qrService.changeQuizRoomMode(dto.getRoomNum(), currMode);
 	}
 	
+	@MessageMapping("/changeParticipantState")
+	public void ChangeParticipantState(WebSocketDTO dto) {
+		log.info("Room : "+dto.getRoomNum()+", member : "+dto.getPartId()+", changeMode : "+dto.getMsg());
+		qrService.changeParticipantState(dto.getRoomNum(), Boolean.parseBoolean(dto.getMsg()));
+	}
+	
 	@MessageMapping("/selectQuiz")
 	@SendTo("/quiz/selectedQuiz")
 	public String  SelectQuiz(WebSocketDTO dto) {
@@ -95,7 +101,8 @@ public class StompController {
 		QuizRoom qr = qrService.findQuizRoomByRoomNum(dto.getRoomNum());
 		qService.selectQuiz(qr);
 		log.info("[select complete] Quiz : "+qr.getCurrQuiz().getQuestion()+", Answer : "+qr.getCurrQuiz().getAnswer()+", Difficulty : "+qr.getCurrQuiz().getDifficulty());
-		String result ="{\"question\":\""+qr.getCurrQuiz().getQuestion()+"\","
+		String result ="{\"num\":\""+qr.getCurrQuizNum()+"\","
+					+ "\"question\":\""+qr.getCurrQuiz().getQuestion()+"\","
 					+ "\"answer\":\""+qr.getCurrQuiz().getAnswer()+"\","
 					+"\"difficulty\":\""+qr.getCurrQuiz().getDifficulty()+"\"}";
 		return result;

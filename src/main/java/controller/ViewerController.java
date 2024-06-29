@@ -39,6 +39,11 @@ public class ViewerController{
 			model.addAttribute("url", "backPage");
 			return "alert";
 		}
+		if(!qr.isAllowParticipant()) {
+			model.addAttribute("msg", "해당 방이 참여를 허용하지 않고 있습니다. 다음에 다시 시도해주세요");
+			model.addAttribute("url", "backPage");
+			return "alert";
+		}
 		if(!qr.getPassword().equals(password)) {
 			model.addAttribute("msg", "비밀번호가 일치하지 않습니다");
 			model.addAttribute("url", "backPage");

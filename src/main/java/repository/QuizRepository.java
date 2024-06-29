@@ -70,5 +70,6 @@ public class QuizRepository {
 		Collections.shuffle(fQList);
 		q = fQList.get(0);
 		qr.setCurrQuiz(q);
+		qr.updateCurrQuizNum();
 	}
 }
