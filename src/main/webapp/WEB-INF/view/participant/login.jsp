@@ -17,7 +17,7 @@
 		<br>
 		<label>
 		비밀번호 :
-		<input type="password" name="password" placeholder="방 번호를 입력해주세요"/>
+		<input type="password" name="password" placeholder="비밀번호를 입력해주세요"/>
 		</label>
 		<br>
 		<label>

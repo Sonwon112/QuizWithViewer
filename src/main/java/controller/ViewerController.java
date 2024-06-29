@@ -25,6 +25,7 @@ public class ViewerController{
 	@PostMapping("/partLogin")
 	public String Login(@RequestParam String roomNum, @RequestParam String password, Participant participant, Model model) {
 		QuizRoom qr = null;
+		
 		try {
 			qr = qrService.findQuizRoomByRoomNum(roomNum);
 		}catch (Exception e) {

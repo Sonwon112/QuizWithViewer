@@ -9,3 +9,50 @@
 	display: flex;
 	flex:auto;
 }
+
+.subtitle{
+	width: 50%;
+}
+
+.box{
+	border: 2px black solid;
+	border-radius: 15px;
+}
+
+.outline{
+	width:90%;
+	padding:10px;
+	display:inline-block;
+}
+
+.inner{
+	width: 45%;
+	display: block;
+	padding : 10px;
+	float:left;
+	margin:5px;
+}
+
+.quiz{
+	width: 80%;
+	display: block;
+	padding : 10px;
+	margin : 5px;
+	float: none;
+}
+
+.subtitle{
+	font-size:2em;
+	font-weight:bold;
+}
+
+.controlBtn{
+	margin:5px;
+}
+.inline-block{
+	display:inline-block;
+}
+
+.left{
+	float:left;
+}

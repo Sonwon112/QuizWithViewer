@@ -1,6 +1,6 @@
 package model;
 
-public class ParticipantDTO {
+public class WebSocketDTO {
 	private String roomNum;
 	private int partId;
 	private String type;

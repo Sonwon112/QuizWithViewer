@@ -1,11 +1,8 @@
 package model;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
-
-import org.springframework.web.socket.WebSocketSession;
 
 import customEnum.QuizMode;
 
@@ -22,8 +19,7 @@ public class QuizRoom {
 	private int participantLastNum = 0;
 	private int currParticipantNum = 0;
 	private QuizMode currMode = QuizMode.DEFAULT;
-	private String currQuestion;
-	private String currAnswer;
+	private Quiz currQuiz;
 	
 	public QuizRoom(String password) {
 		roomNum = rand.ints(leftLimit, rightLimit+1)
@@ -32,6 +28,7 @@ public class QuizRoom {
 				.collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
 				.toString();
 		this.password = password;
+		currQuiz = new Quiz("문제가 출제되지 않았습니다","","");
 	}
 	
 	public String getPassword() {
@@ -69,26 +66,18 @@ public class QuizRoom {
 	public void setCurrMode(QuizMode currMode) {
 		this.currMode = currMode;
 	}
-
-	public String getCurrQuestion() {
-		return currQuestion;
-	}
-
-	public void setCurrQuestion(String currQuestion) {
-		this.currQuestion = currQuestion;
-	}
-
-	public String getCurrAnswer() {
-		return currAnswer;
-	}
-
-	public void setCurrAnswer(String currAnswer) {
-		this.currAnswer = currAnswer;
-	}
 	
+	public Quiz getCurrQuiz() {
+		return currQuiz;
+	}
+
+	public void setCurrQuiz(Quiz currQuiz) {
+		this.currQuiz = currQuiz;
+	}
+
 	public void CompareAnswer() {
 		participantMap.forEach((i,p)->{
-			if(!p.getAnswer().equals(currAnswer)) {
+			if(!p.getAnswer().equals(currQuiz.getAnswer())) {
 				p.setPart(false);
 			}
 		});
