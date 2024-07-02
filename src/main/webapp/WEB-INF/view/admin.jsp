@@ -38,8 +38,10 @@
 					<div class="box quiz">
 						<div class="inline-block">
 							<button class="left controlBtn" onclick="sendAction('selectQuiz')">문제 출제</button>
-							<button class="left controlBtn" onclick="sendAction('openCorrect')">정답 공개</button>
 							<button class="left controlBtn" onclick="sendAction('openAnswer')">답안 공개</button>
+							<button class="left controlBtn" onclick="sendAction('openCorrect')">정답 공개</button>
+							
+							<span class="left" id="timer"></span>
 						</div>
 
 						<div id="questionBox">${quizRoom.currQuiz.question}</div>
@@ -61,7 +63,8 @@
 						</div>
 						<div class="left" id="participantState">비활성화</div>
 					</div>
-					<hr>
+					<hr style="width: 100%;">
+					<div class="scroll" id="listElementBox"></div>
 				</div>
 			</div>
 
@@ -74,15 +77,17 @@
 			<script type="text/javascript"
 				src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 			<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+			<script src="/static/js/timer.js"></script>
 			<script type="text/javascript">
 				let participantList;
 				let roomNum = '${quizRoom.roomNum}';
 				const socket = new SockJS("/ws/init");
 				let stompClient = Stomp.over(socket);
+
 				socket.debug = null;
 				document.addEventListener("DOMContentLoaded", function () {
 
-					participantList = document.getElementById("participantList");
+					participantList = document.getElementById("listElementBox");
 
 					socket.onopen = () => {
 						let data = {
@@ -108,10 +113,6 @@
 								changeQuiz(message);
 							}
 						}
-
-
-
-
 					}
 
 					socket.onerror = (event) => {
@@ -173,8 +174,16 @@
 
 				function changeQuiz(quiz) {
 					let quizJSON = JSON.parse(quiz)
+					let difficulty = quizJSON.difficulty === "아이스" ? "하" : quizJSON.difficulty;
+
 					let answer = "정답 : " + quizJSON.answer;
-					let question = "난이도 : " + quizJSON.difficulty + "<br>" + quizJSON.num + ". " + quizJSON.question
+					let question = "난이도 : " + difficulty + "<br>" + quizJSON.num + ". " + quizJSON.question
+
+					let second = difficulty === "상" ? 15 : 10;
+					if (quizJSON.question != "더 이상 문제가 존재하지 않습니다") {
+						setTime(second);
+						start();
+					}
 
 					$("#questionBox").html(question);
 					$("#answerBox").text(answer);
@@ -216,13 +225,15 @@
 				}
 
 				function sendAction(value) {
-					let data = {
-						"roomNum": roomNum,
-						"partId": "-1",
-						"type": value,
-						"msg": value
-					};
-					stompClient.send("/app/" + value, {}, JSON.stringify(data));
+					if (currSec <= 0) {
+						let data = {
+							"roomNum": roomNum,
+							"partId": "-1",
+							"type": value,
+							"msg": value
+						};
+						stompClient.send("/app/" + value, {}, JSON.stringify(data));
+					}
 				}
 			</script>
 		</body>

@@ -2,7 +2,7 @@ package model;
 
 public class Participant {
 	
-	private int partId;
+	private int partId; // -1 : admin, -2 : overlay
 	private String nickname;
 	private boolean isPart = true;
 	private String answer;

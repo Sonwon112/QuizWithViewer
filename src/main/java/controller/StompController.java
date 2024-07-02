@@ -40,9 +40,17 @@ public class StompController {
 	@SendTo("/quiz/partParticipant")
 	public String example(WebSocketDTO dto) {
 		log.info("Room : "+dto.getRoomNum()+", member : "+dto.getPartId()+" "+dto.getMsg());
-		
-		Participant participant = participantService.findParticipant(dto.getRoomNum(), dto.getPartId());
 		String result = "";
+		switch(dto.getPartId()) {
+		case -1: // admin
+			result = "admin Participant";
+			return result;
+		case -2: // overlay
+			result = "overlay Participant";
+			return result;
+		}
+		Participant participant = participantService.findParticipant(dto.getRoomNum(), dto.getPartId());
+		
 		try {
 			result = mapper.writeValueAsString(participant);
 		} catch (JsonProcessingException e) {
@@ -97,7 +105,7 @@ public class StompController {
 	@MessageMapping("/selectQuiz")
 	@SendTo("/quiz/selectedQuiz")
 	public String  SelectQuiz(WebSocketDTO dto) {
-		log.info("Room : "+dto.getRoomNum()+", member : "+dto.getPartId()+", changeMode : "+dto.getMsg());
+		log.info("Room : "+dto.getRoomNum()+", member : "+dto.getPartId()+", requestSelectQuiz : "+dto.getMsg());
 		QuizRoom qr = qrService.findQuizRoomByRoomNum(dto.getRoomNum());
 		qService.selectQuiz(qr);
 		log.info("[select complete] Quiz : "+qr.getCurrQuiz().getQuestion()+", Answer : "+qr.getCurrQuiz().getAnswer()+", Difficulty : "+qr.getCurrQuiz().getDifficulty());
@@ -109,14 +117,25 @@ public class StompController {
 	}
 	
 	@MessageMapping("/openCorrect")
-	public void OpenCorrect(WebSocketDTO dto) {
-		log.info("Room : "+dto.getRoomNum()+", member : "+dto.getPartId()+", changeMode : "+dto.getMsg());
+	@SendTo("/quiz/openCorrect")
+	public String OpenCorrect(WebSocketDTO dto) {
+		log.info("Room : "+dto.getRoomNum()+", member : "+dto.getPartId()+", request Open Correct Answer: "+dto.getMsg());
+		return "{\"msg\":\"openCorrect\"}";
 	}
 	
 	@MessageMapping("/openAnswer")
-	public void OpenAnswer(WebSocketDTO dto) {
-		log.info("Room : "+dto.getRoomNum()+", member : "+dto.getPartId()+", changeMode : "+dto.getMsg());
+	@SendTo("/quiz/openAnswer")
+	public String OpenAnswer(WebSocketDTO dto) {
+		log.info("Room : "+dto.getRoomNum()+", member : "+dto.getPartId()+", request Open Submitted Answer : "+dto.getMsg());
+		return "{\"msg\":\"openAnswer\"}";
 	}
 	
-	
+	@MessageMapping("/submitAnswer")
+	@SendTo("/quiz/submittedAnswer")
+	public String submitAnswer(WebSocketDTO dto) {
+		log.info("Room : "+dto.getRoomNum()+", member : "+dto.getPartId()+", answer : "+dto.getMsg());
+		participantService.setAnswer(dto.getRoomNum(), dto.getPartId(), dto.getMsg());
+		String submittedAnswer = "{\"partId\":"+dto.getPartId()+",\"answer\":\""+dto.getMsg()+"\"}";
+		return submittedAnswer;
+	}
 }

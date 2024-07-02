@@ -19,7 +19,7 @@ public class QuizService {
 		repo.getQuizToFile(roomNum, in);
 	}
 
-	public void selectQuiz(QuizRoom qr) {
+	public void selectQuiz(QuizRoom qr){
 		repo.selectQuiz(qr);
 	}
 }
