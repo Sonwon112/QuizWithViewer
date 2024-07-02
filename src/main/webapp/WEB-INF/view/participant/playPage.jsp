@@ -19,7 +19,7 @@
 				<br>
 			</div>
 			<div id="inputBox">
-				<input id="answer" type="text" name="answer" />
+				<input class="input-text" id="answer" type="text" name="answer" />
 				<button id="sendAnswerBtn" onclick="sendAnswer()"> ↲</button>
 
 			</div>

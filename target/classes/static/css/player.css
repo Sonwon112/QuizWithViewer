@@ -63,12 +63,7 @@ body{
 #answer{
     height: 100%;
     width: 76%;
-    background: none;
-    border: 0;
-    border-bottom: 2px solid gray;
-    border-radius: 3px;
     font-size: 1.8em;
-    text-align: center;
 }
 #answer:focus{
     outline: none;
@@ -107,3 +102,43 @@ body{
     top: 45%;
     font-weight: bold;
 }
+
+#logo{
+    width: 32%;
+    aspect-ratio: 301 / 240;
+    position: absolute;
+    left: 50%;
+    margin-left: -16%;
+    top: 8%;
+}
+
+#inputBox{
+    position: absolute;
+    width: 70%;
+    text-align: center;
+    left: 50%;
+    margin-left: -35%;
+    top: 55%;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+#submitBtn{
+    margin-top: 4%;
+    font-size: 1.2em;
+    width: 30%;
+}
+
+.input-text{
+    background: none;
+    border: 0;
+    border-bottom: 1px solid lightgray;
+    text-align: center;
+    width:33%;
+    font-size:1em
+}
+
+.input-text:focus{
+    outline:none;
+}
+
