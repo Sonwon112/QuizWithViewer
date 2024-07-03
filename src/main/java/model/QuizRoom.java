@@ -83,12 +83,28 @@ public class QuizRoom {
 
 	public List<Integer> CompareAnswer() {
 		List<Integer> dropOutList = new ArrayList<>();
-		participantMap.forEach((i,p)->{
-			if(p.isPart() && !p.getAnswer().equals(currQuiz.getAnswer())) {
-				p.setPart(false);
-				dropOutList.add(p.getPartId());
-			}
-		});
+		switch (currMode.name()) {
+		case "CONSOLATION_MATCH":
+			participantMap.forEach((i,p)->{
+				if(!p.isPart()) {
+					p.setPart(true);
+					if(!p.getAnswer().equals(currQuiz.getAnswer())) {
+						p.setPart(false);
+						dropOutList.add(p.getPartId());
+					}
+				}
+			});
+			break;
+		default:
+			participantMap.forEach((i,p)->{
+				if(p.isPart() && !p.getAnswer().equals(currQuiz.getAnswer())) {
+					p.setPart(false);
+					dropOutList.add(p.getPartId());
+				}
+			});
+			break;
+		}
+		
 		return dropOutList;
 	}
 
@@ -108,4 +124,14 @@ public class QuizRoom {
 		this.isAllowParticipant = isAllowParticipant;
 	}
 	
+	public List<Integer> findDropOutParticipant() {
+		List<Integer> dropOuttedList = new ArrayList<>();
+		participantMap.forEach((i,p)->{
+			if(!p.isPart()) {
+//				p.setPart(true);
+				dropOuttedList.add(p.getPartId());
+			}
+		});
+		return dropOuttedList;
+	}
 }

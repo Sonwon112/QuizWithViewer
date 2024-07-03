@@ -1,6 +1,5 @@
 let autoScrollMap = new Map();
-
-
+let scrollTopMap = new Map();
 
 function setScrollMap(){
     console.log("set Auto Scroll")
@@ -8,29 +7,41 @@ function setScrollMap(){
     console.log(scrollElement);
     for(var i = 0; i < scrollElement.length; i++){
         autoScrollMap.set(scrollElement[i],"down");
+		scrollTopMap.set(scrollElement[i],scrollElement[i].scrollTop);
         scrollTable(scrollElement[i]);        
     }
 
 
 }
 
+
 function scrollTable(target) {  
     setInterval(() => {
-      if(currSec > 0){
         let direction = autoScrollMap.get(target);
-        console.log(target,direction)
+        let prevScrollTop = scrollTopMap.get(target);
+				//console.log(target,direction)
         if(direction=="down"){
             target.scrollTop = target.scrollTop + 2;
-            if (target.offsetHeight + target.scrollTop >= target.scrollHeight) {
-                autoScrollMap.set(target,"up");
-            }
+			if(target.scrollTop != prevScrollTop){
+				if (target.offsetHeight + target.scrollTop >= target.scrollHeight) {
+					autoScrollMap.set(target,"up");
+				}
+			}else{
+				direction = "up";
+			}
+            
         }else{
             target.scrollTop = target.scrollTop - 2;
-            if (target.offsetHeight + target.scrollTop <= target.offsetHeight) {
-                autoScrollMap.set(target,"down");
-            }
+			if(target.scrollTop != prevScrollTop){
+				if (target.offsetHeight + target.scrollTop <= target.offsetHeight) {
+                	autoScrollMap.set(target,"down");
+            	}
+			}else{
+				direction = "down";
+			}
         }
-      }
-    }, 10);
+		scrollTopMap.set(target,target.scrollTop);
+		
+    }, 100);
     
 }

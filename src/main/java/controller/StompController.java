@@ -95,6 +95,20 @@ public class StompController {
 			break;
 		case "CONSOLATION_MATCH":
 			currMode = QuizMode.CONSOLATION_MATCH;
+			List<Integer> dropouttedList = participantService.findDropOutParticipant(dto.getRoomNum());
+			for(int id : dropouttedList) {
+				template.convertAndSend("/quiz/changePartState/"+id,"{\"state\":\"true\"}");
+//				log.info("send state");
+			}
+			
+			String listToJSON = "";
+			try {
+				listToJSON = mapper.writeValueAsString(dropouttedList);
+			} catch (JsonProcessingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			template.convertAndSend("/quiz/consolationmatch", "{\"msg\":\"consolation match\",\"list\":"+listToJSON+"}");
 			break;
 		}
 		
@@ -138,7 +152,7 @@ public class StompController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return "{\"msg\":\"openCorrect\",\"list\":\""+listToJSON+"\"}";
+		return "{\"msg\":\"openCorrect\",\"list\":"+listToJSON+"}";
 	}
 	
 	@MessageMapping("/openAnswer")

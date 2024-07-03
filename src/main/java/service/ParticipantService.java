@@ -30,6 +30,11 @@ public class ParticipantService {
 		return qr.CompareAnswer();
 	}
 	
+	public List<Integer> findDropOutParticipant(String roomNum){
+		QuizRoom qr = qrService.findQuizRoomByRoomNum(roomNum);
+		return qr.findDropOutParticipant();
+	}
+	
 	public Participant findParticipant(String roomNum, int partId) {
 		QuizRoom qr = qrService.findQuizRoomByRoomNum(roomNum);
 		if(qr == null) {

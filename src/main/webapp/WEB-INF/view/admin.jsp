@@ -100,6 +100,8 @@
 						stompClient.subscribe("/quiz/partParticipant");
 						stompClient.subscribe("/quiz/selectedQuiz");
 						stompClient.subscribe("/quiz/startTimer");
+						stompClient.subscribe("/quiz/openCorrect");
+						stompClient.subscribe("/quizi/consolationmatch");
 						stompClient.send("/app/participation", {}, JSON.stringify(data));
 					}
 
@@ -115,6 +117,10 @@
 								changeQuiz(message);
 							} else if (value.includes("startTimer")){
 								startTimer(message);
+							} else if(value.includes("/quiz/openCorrect")){
+								updateList(message);
+							} else if(value.includes("/quiz/consolationmatch")){
+								consolationMatchList(message);
 							}
 						}
 					}
@@ -170,7 +176,7 @@
 					let nickname = participantJSON.nickname;
 
 					let participantElement = document.createElement("div");
-					participantElement.id = "participantListElement"
+					participantElement.id = "participantListElement"+partId;
 					let participantText = partId + "." + nickname + "<button id='btnOut' onclick='sendOut()'>-</button>"
 					participantElement.innerHTML = participantText;
 					participantList.appendChild(participantElement);
@@ -236,6 +242,26 @@
 							"msg": value
 						};
 						stompClient.send("/app/" + value, {}, JSON.stringify(data));
+					}
+				}
+
+				function updateList(message){
+					let updateListJSON = JSON.parse(message);
+					let list = updateListJSON.list;
+					console.log(list);
+					for(var i = 0; i < list.length;i++){
+						let id = "#participantListElement"+list[i];
+						$(id).css("text-decoration","line-through");
+					}
+				}
+
+				function consolationMatchList(message){
+					let updateListJSON = JSON.parse(message);
+					let list = updateListJSON.list;
+					// console.log(list);
+					for(var i = 0; i < list.length;i++){
+						let listId = "#participantListElement"+list[i];
+               	    	$(listId).css("text-decoration","none");
 					}
 				}
 			</script>
