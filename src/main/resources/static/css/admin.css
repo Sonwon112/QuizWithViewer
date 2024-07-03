@@ -2,12 +2,22 @@
 
 #participantList{
 	height:300px;
-	overflow-y:auto;
+	display: flex;
+	flex-direction: column;
+	flex: auto;
 }
 
 #participantListElement{
 	display: flex;
 	flex:auto;
+}
+
+#listElementBox{
+	width: 100%;
+}
+
+#timer{
+	padding:5px;
 }
 
 .subtitle{
@@ -67,9 +77,9 @@
 	box-shadow: 0 0 3px 2px rgba(0 0 0 / 10%);
 	cursor: pointer;
 	margin: 5px;
-  }
+}
   
-  .toggleSwitch .toggleButton {
+.toggleSwitch .toggleButton {
 	width: 20px;
 	height: 20px;
 	position: absolute;
@@ -78,17 +88,31 @@
 	transform: translateY(-50%);
 	border-radius: 50%;
 	background: #edf03d;
-  }
-  
-  #toggle:checked ~ .toggleSwitch {
+}
+
+#toggle:checked ~ .toggleSwitch {
 	background: #edf03d;
-  }
+}
   
-  #toggle:checked ~ .toggleSwitch .toggleButton {
+#toggle:checked ~ .toggleSwitch .toggleButton {
 	left: calc(100% - 24px);
 	background: #fff;
-  }
+}
   
-  .toggleSwitch, .toggleButton {
+.toggleSwitch, .toggleButton {
 	transition: all 0.2s ease-in;
-  }
+}
+
+
+
+.scroll{
+    overflow-y:scroll;
+    scrollbar-width: none;
+	scroll-behavior:smooth;
+	
+}
+
+.scroll::-webkit-scrollbar {
+	display:none /* Chrome , Safari , Opera */
+}
+

@@ -1,0 +1,174 @@
+body{
+    position: relative;
+    width:100%;
+    height:100%;
+}
+
+#background{
+    position:absolute;
+    background-image: url("/static/img/tablet.png");
+    background-size:cover;
+    background-repeat: no-repeat;
+    aspect-ratio: 16/9;
+    width: 80%;
+    left:50%;
+    margin-left: -40%;
+}
+
+#info{
+    position: absolute;
+    left:8%;
+    top:8%;
+    font-weight: bold;
+}
+
+#questionBox{
+    position:absolute;
+    left:50%;
+    width: 80%;
+    margin-left: -40%;
+    text-align: center;
+    top:15%;
+    font-size: 3em;
+}
+
+#difficulty{
+    width: 1.5em;
+    height: 1.5em;
+    background-color:rgb(42, 60, 101);
+    color:white;
+    border-radius: 0.75em;
+    line-height: 1.5em;
+    position:absolute;
+}
+
+#question{
+    width: 70%;
+    margin-left: 20%;
+    font-size: 0.6em;
+    max-height: 150px;
+    word-break: break-all;
+    overflow-y:scroll;
+    scrollbar-width: thin;
+    scroll-behavior:smooth;
+}
+
+#inputBox{
+    position: absolute;
+    width: 60%;
+    left: 50%;
+    margin-left: -30%;
+    text-align: center;
+    top: 55%;
+    height: 10%;
+}
+
+#answer{
+    height: 100%;
+    width: 76%;
+    font-size: 1.8em;
+}
+#answer:focus{
+    outline: none;
+}
+
+#sendAnswerBtn{
+    height: 100%;
+    font-size: 3em;
+    background: none;
+    border: 0;
+}
+
+#sendAnswerBtn:hover{
+    color:gray;
+}
+
+
+#timer{
+    position: absolute;
+    font-size: 3em;
+    left: 50%;
+    text-align: center;
+    width: 10%;
+    margin-left: -5%;
+    top: 70%;
+    font-weight: bold;
+}
+
+#resultTxt{
+    position: absolute;
+    font-size: 3em;
+    left: 50%;
+    text-align: center;
+    width:20%;
+    margin-left: -10%;
+    top: 45%;
+    font-weight: bold;
+}
+
+#logo{
+    width: 32%;
+    aspect-ratio: 301 / 240;
+    position: absolute;
+    left: 50%;
+    margin-left: -16%;
+    top: 8%;
+}
+
+#inputBox{
+    position: absolute;
+    width: 70%;
+    text-align: center;
+    left: 50%;
+    margin-left: -35%;
+    top: 55%;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+#submitBtn{
+    margin-top: 4%;
+    font-size: 1.2em;
+    width: 30%;
+}
+
+#imgX{
+    position: absolute;
+    background-image: url(/static/img/x.png);
+    background-repeat: no-repeat;
+    background-size: contain;
+    width: 38%;
+    aspect-ratio: 1 / 1;
+    left: 50%;
+    margin-left: -19%;
+    margin-top: 8%;
+}
+
+#dropout{
+    position: absolute;
+    background-color: #77777766;
+    width:80%;
+    aspect-ratio: 4/2.2;
+    left:50%;
+    margin-left:-40%;
+    top:2%;
+    border-radius: 15px;
+}
+
+.dropout{
+    visibility: hidden;
+}
+
+.input-text{
+    background: none;
+    border: 0;
+    border-bottom: 1px solid lightgray;
+    text-align: center;
+    width:33%;
+    font-size:1em
+}
+
+.input-text:focus{
+    outline:none;
+}
+

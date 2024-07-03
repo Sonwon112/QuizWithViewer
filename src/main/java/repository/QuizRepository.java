@@ -39,7 +39,7 @@ public class QuizRepository {
 //		System.out.println(quizMap.get(roomNum).size());
 	}
 	
-	public void selectQuiz(QuizRoom qr) {
+	public void selectQuiz(QuizRoom qr) throws IndexOutOfBoundsException {
 		String roomNum = qr.getRoomNum();
 		List<Quiz> qList = quizMap.get(roomNum);
 		Quiz q = new Quiz("더 이상 문제가 존재하지 않습니다","","");
@@ -48,28 +48,31 @@ public class QuizRepository {
 			ArrayList<Quiz> iceQList = new ArrayList<Quiz>();
 			try {
 				iceQList.addAll(qList.stream().filter(v->!v.isSubmitted()).filter(v->v.getDifficulty().equals("아이스")).toList());
+				Collections.shuffle(iceQList);
+				q = iceQList.get(0);
+				q.setSubmitted(true);
 			}catch (Exception e) {
 				// TODO: handle exception
 				e.printStackTrace();
+			}finally {
+				qr.setCurrQuiz(q);
+				qr.updateCurrQuizNum();
 			}
-			Collections.shuffle(iceQList);
-			q = iceQList.get(0);
-
-			
 			return;
 		}
 		
 		ArrayList<Quiz> fQList = new ArrayList<Quiz>();
 		try {
 			fQList.addAll(qList.stream().filter(v->!v.isSubmitted()).toList());
+			Collections.shuffle(fQList);
+			q = fQList.get(0);
+			q.setSubmitted(true);
 		}catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
+		}finally {
+			qr.setCurrQuiz(q);
+			qr.updateCurrQuizNum();
 		}
-		
-		Collections.shuffle(fQList);
-		q = fQList.get(0);
-		qr.setCurrQuiz(q);
-		qr.updateCurrQuizNum();
 	}
 }

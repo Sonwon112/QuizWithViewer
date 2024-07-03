@@ -1,0 +1,107 @@
+.box{
+    padding:5px;
+    border-radius: 15px;
+}
+.text-center{
+    text-align: center;
+}
+
+.innerBox{
+    width:70%;
+    margin:2% auto;
+    padding:5px;
+    max-height: 100px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.17em;
+}
+
+.table-element{
+    border:2px solid rgb(70, 71, 18);
+    width:30%;
+    text-align: center;
+    margin:1%;
+    aspect-ratio: 16/9;
+}
+
+.scroll{
+    overflow-y:scroll;
+    scrollbar-width: none;
+    scroll-behavior:smooth;
+}
+
+.scroll::-webkit-scrollbar {
+	display:none /* Chrome , Safari , Opera */
+}
+
+#participantBox{
+    display: flex;
+    flex:auto;
+    aspect-ratio: 16/7;
+}
+
+#participantTable{
+    margin:1%;
+    width: 80%;
+    display:flex;
+    flex:auto;
+    flex-wrap:wrap;
+    align-items: start;
+    align-content: flex-start;
+    background-color: beige;
+    justify-content: center;
+    aspect-ratio: 16/9;
+}
+
+#participantList{
+    margin:1%;
+    width:20%;
+    background-color: beige;
+    height: 100%;
+    display:flex;
+    flex-direction: column;
+    flex:auto;
+}
+
+#QnABox{
+    margin:1% auto;
+    width:97%;
+    height: 200px;
+    background-color: beige;
+    display: flex;
+    align-content: center;
+    flex-direction: column;
+}
+
+#answerBox{
+    display: flex;
+    align-content: center;
+}
+
+#listElementBox{
+    height: 100%;
+}
+
+#questionBox{
+    display: flex;
+    justify-content: center;
+    position: relative;
+}
+
+#difficulty{
+    position:absolute;
+    width: 50px;
+    height: 50px;
+    text-align: center;
+    line-height: 50px;
+    border-radius: 25px;
+    background-color: rgb(164, 166, 82);
+    color:white;
+    font-weight: bold;
+    font-size: 1.17em;
+    text-align: center;
+    position:absolute;
+    top:50%;
+    margin-top:-25px;
+    left:4%;
+}
