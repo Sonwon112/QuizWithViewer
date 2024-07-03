@@ -50,6 +50,7 @@ public class QuizRepository {
 				iceQList.addAll(qList.stream().filter(v->!v.isSubmitted()).filter(v->v.getDifficulty().equals("아이스")).toList());
 				Collections.shuffle(iceQList);
 				q = iceQList.get(0);
+				q.setSubmitted(true);
 			}catch (Exception e) {
 				// TODO: handle exception
 				e.printStackTrace();
@@ -65,6 +66,7 @@ public class QuizRepository {
 			fQList.addAll(qList.stream().filter(v->!v.isSubmitted()).toList());
 			Collections.shuffle(fQList);
 			q = fQList.get(0);
+			q.setSubmitted(true);
 		}catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();

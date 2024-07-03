@@ -1,6 +1,8 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -79,12 +81,15 @@ public class QuizRoom {
 		this.currQuiz = currQuiz;
 	}
 
-	public void CompareAnswer() {
+	public List<Integer> CompareAnswer() {
+		List<Integer> dropOutList = new ArrayList<>();
 		participantMap.forEach((i,p)->{
-			if(!p.getAnswer().equals(currQuiz.getAnswer())) {
+			if(p.isPart() && !p.getAnswer().equals(currQuiz.getAnswer())) {
 				p.setPart(false);
+				dropOutList.add(p.getPartId());
 			}
 		});
+		return dropOutList;
 	}
 
 	public int getCurrQuizNum() {

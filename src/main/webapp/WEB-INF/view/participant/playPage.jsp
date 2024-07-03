@@ -12,23 +12,21 @@
 
 		<body>
 			<div id="background">
+				<div class="dropout" id="imgX"></div>
 				<div id="info">${participant.partId}번 ${participant.nickname}</div>
-			<div id="questionBox">
-				<div id="difficulty">난이도</div>
-				<div id="question">문제</div>
-				<br>
-			</div>
-			<div id="inputBox">
-				<input class="input-text" id="answer" type="text" name="answer" />
-				<button id="sendAnswerBtn" onclick="sendAnswer()"> ↲</button>
-
-			</div>
-			<div style="visibility: hidden" id="resultTxt">제출됨!</div>
-			<div id="timer">--</div>
-
+				<div id="questionBox">
+					<div id="difficulty">난이도</div>
+					<div id="question">문제</div>
+				</div>
+				<div id="inputBox">
+					<input class="input-text" id="answer" type="text" name="answer" />
+					<button id="sendAnswerBtn" onclick="sendAnswer()"> ↲</button>
+				</div>
+				<div style="visibility: hidden" id="resultTxt">제출됨!</div>
+				<div id="timer">--</div>
 			<!--<div class="scroll" id="test">테스트</div>-->
-
 			</div>
+			<div class="dropout" id="dropout"></div>
 			
 			<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
 			<script type="text/javascript"
@@ -47,7 +45,8 @@
 					socket.onopen = () => {
 						stompClient.subscribe('/quiz/selectedQuiz');
 						stompClient.subscribe('/quiz/changePartState/' + partId);
-
+						stompClient.subscribe("/quiz/startTimer");
+						
 						let data = {
 							"roomNum": roomNum,
 							"partId": partId,
@@ -60,13 +59,15 @@
 					socket.onmessage = (event) => {
 						let value = event.data;
 						let startPoint = value.indexOf('{');
-
+						console.log(event);
 						if (startPoint != -1) {
 							let message = value.substring(startPoint, value.length - 1);
 							if (value.includes("selectedQuiz")) {
 								changeQuiz(message);
 							} else if (value.includes("changePartState")) {
-
+								changePartState(message);
+							} else if(value.includes("startTimer")){
+								startTimer(message);
 							}
 						}
 					}
@@ -83,7 +84,7 @@
 
 				function sendAnswer() {
 						// console.log("call sendAnswer")/
-						if (currSec>0) {
+						if (currState=="start") {
 							let answer = $("#answer").val();
 							// console.log("send "+answer);
 
@@ -95,6 +96,7 @@
 							}
 							stompClient.send("/app/submitAnswer", {}, JSON.stringify(data));
 							$("#resultTxt").css("visibility","visible");
+							$("#resultTxt").css("display","");
 							$("#resultTxt").fadeOut('slow');
 						}
 
@@ -108,17 +110,24 @@
 						let second = difficulty === "상" ? 15 : 10;
 
 						if (quizJSON.question != "더 이상 문제가 존재하지 않습니다") {
-							setTime(second);
-							start();
 							$("#difficulty").text(difficulty);
 							$("#question").text(question);
+							setTime(second);
 						}
 					}
 
 
 
 					function changePartState(state) {
+						
+						let stateJSON = JSON.parse(state);
+						let isPart = stateJSON.state;
 
+						if(isPart==='true'){
+							$(".dropout").css("visibility","hidden");
+						}else{
+							$(".dropout").css("visibility","visible");
+						}
 					}
 
 			</script>

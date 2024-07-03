@@ -22,4 +22,6 @@ public class QuizService {
 	public void selectQuiz(QuizRoom qr){
 		repo.selectQuiz(qr);
 	}
+	
+	
 }

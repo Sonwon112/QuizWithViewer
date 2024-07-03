@@ -5,7 +5,7 @@ public class Participant {
 	private int partId; // -1 : admin, -2 : overlay
 	private String nickname;
 	private boolean isPart = true;
-	private String answer;
+	private String answer="";
 	
 	public Participant(String nickname) {
 		this.nickname = nickname;

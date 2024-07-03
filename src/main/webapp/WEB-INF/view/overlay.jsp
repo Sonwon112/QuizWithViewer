@@ -67,7 +67,7 @@
                             }else if(value.includes("openAnswer")){
                                 openParticipantAnswer();
                             }else if(value.includes("openCorrect")){
-                                openQuestionAnswer();
+                                openQuestionAnswer(message);
                             }
 						}
                     }
@@ -143,7 +143,7 @@
                 $(".answer").css("visibility","hidden");
             }
 
-            function openQuestionAnswer(){
+            function openQuestionAnswer(message){
                 $("#Qanswer").css("visibility","visible");
             }
 

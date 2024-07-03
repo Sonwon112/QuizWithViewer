@@ -38,6 +38,7 @@
 					<div class="box quiz">
 						<div class="inline-block">
 							<button class="left controlBtn" onclick="sendAction('selectQuiz')">문제 출제</button>
+							<button class="left controlBtn" onclick="sendAction('startTimer')">타이머 시작</button>
 							<button class="left controlBtn" onclick="sendAction('openAnswer')">답안 공개</button>
 							<button class="left controlBtn" onclick="sendAction('openCorrect')">정답 공개</button>
 							
@@ -98,6 +99,7 @@
 						};
 						stompClient.subscribe("/quiz/partParticipant");
 						stompClient.subscribe("/quiz/selectedQuiz");
+						stompClient.subscribe("/quiz/startTimer");
 						stompClient.send("/app/participation", {}, JSON.stringify(data));
 					}
 
@@ -111,6 +113,8 @@
 								addParticipant(message);
 							} else if (value.includes("selectedQuiz")) {
 								changeQuiz(message);
+							} else if (value.includes("startTimer")){
+								startTimer(message);
 							}
 						}
 					}
@@ -179,10 +183,9 @@
 					let answer = "정답 : " + quizJSON.answer;
 					let question = "난이도 : " + difficulty + "<br>" + quizJSON.num + ". " + quizJSON.question
 
-					let second = difficulty === "상" ? 15 : 10;
+					
 					if (quizJSON.question != "더 이상 문제가 존재하지 않습니다") {
-						setTime(second);
-						start();
+						
 					}
 
 					$("#questionBox").html(question);
