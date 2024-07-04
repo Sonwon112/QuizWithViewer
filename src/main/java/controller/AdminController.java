@@ -35,10 +35,20 @@ public class AdminController {
 	
 	@PostMapping("/createRoom")
 	public String createRoom(Model model, @RequestParam("password") String password, HttpSession session) {
-		
+//		System.out.println(session.getAttribute("room"));
 		if(session.getAttribute("room")!=null) {
-			model.addAttribute("quizRoom",session.getAttribute("room"));
-			return "admin";
+			try {
+				QuizRoom savedQR = (QuizRoom)session.getAttribute("room");
+				QuizRoom qr = qrService.findQuizRoomByRoomNum(savedQR.getRoomNum());
+				System.out.println(qr);
+				if(qr == null) {throw new Exception("해당 방이 존재하지않습니다");}
+				model.addAttribute("quizRoom",session.getAttribute("room"));
+				return "admin";
+			}catch (Exception e) {
+				// TODO: handle exception
+				session.removeAttribute("room");
+			}
+			
 		}
 		
 		if(password == null || password.isEmpty()) {

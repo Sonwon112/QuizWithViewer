@@ -92,9 +92,29 @@ public class StompController {
 			break;
 		case "GOLDEN_BELL":
 			currMode = QuizMode.GOLDEN_BELL;
+			int goldenBellParticipant = qrService.findGoldenBellParticipant(dto.getRoomNum());
+			if(goldenBellParticipant == -1){
+				template.convertAndSend("/quiz/cantgoldenbell","{\"msg\":\"can't goldenBell\"}");
+			}else {
+				template.convertAndSend("/quiz/goldenbell","{\"id\":\""+goldenBellParticipant+"\"}");
+			}
 			break;
 		case "CONSOLATION_MATCH":
 			currMode = QuizMode.CONSOLATION_MATCH;
+			List<Integer> dropouttedList = participantService.findDropOutParticipant(dto.getRoomNum());
+			for(int id : dropouttedList) {
+				template.convertAndSend("/quiz/changePartState/"+id,"{\"state\":\"true\"}");
+//				log.info("send state");
+			}
+			
+			String listToJSON = "";
+			try {
+				listToJSON = mapper.writeValueAsString(dropouttedList);
+			} catch (JsonProcessingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			template.convertAndSend("/quiz/consolationmatch", "{\"msg\":\"consolation match\",\"list\":"+listToJSON+"}");
 			break;
 		}
 		
@@ -138,7 +158,7 @@ public class StompController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return "{\"msg\":\"openCorrect\",\"list\":\""+listToJSON+"\"}";
+		return "{\"msg\":\"openCorrect\",\"list\":"+listToJSON+"}";
 	}
 	
 	@MessageMapping("/openAnswer")
@@ -165,5 +185,20 @@ public class StompController {
 		participantService.setAnswer(dto.getRoomNum(), dto.getPartId(), dto.getMsg());
 		String submittedAnswer = "{\"partId\":"+dto.getPartId()+",\"answer\":\""+dto.getMsg()+"\"}";
 		return submittedAnswer;
+	}
+	
+	@MessageMapping("/deleteRoom")
+	@SendTo("/quiz/deleteRoom")
+	public String deleteRoom(WebSocketDTO dto) {
+		qrService.removeQuizRoom(dto.getRoomNum());
+		return "{\"msg\":\"delete\"}";
+	}
+	
+	@MessageMapping("/out")
+	@SendTo("/quiz/outPlayer")
+	public String outParticipant(WebSocketDTO dto) {
+		participantService.removePartipant(dto.getRoomNum(), Integer.parseInt(dto.getMsg()));
+		template.convertAndSend("/quiz/out/"+dto.getMsg(),"{\"msg\":\"out\"}");
+		return "{\"msg\":\"openCorrect\",\"list\":["+dto.getMsg()+"]}";
 	}
 }

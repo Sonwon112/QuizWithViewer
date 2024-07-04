@@ -12,6 +12,7 @@
 
 		<body>
 			<h1>관리자 페이지</h1>
+			<button onclick="deleteRoom()">나가기</button>
 			<hr>
 			<p>방 번호 : ${quizRoom.roomNum}</p>
 			<p>비밀번호 : ${quizRoom.password}</p>
@@ -54,7 +55,7 @@
 				<!--참여자 목록-->
 
 				<div class="box inner" id="participantList">
-					<div class="subtitle">참여자 목록</div>
+					<div class="subtitle" id="listTitle">참여자 목록(00/00)</div>
 					<div class="inline-block">
 						<div class="left">
 							<input type="checkbox" id="toggle" hidden onclick="changeParticipantState()">
@@ -79,6 +80,7 @@
 				src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 			<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 			<script src="/static/js/timer.js"></script>
+			<script src="/static/js/counting.js"></script>
 			<script type="text/javascript">
 				let participantList;
 				let roomNum = '${quizRoom.roomNum}';
@@ -100,6 +102,9 @@
 						stompClient.subscribe("/quiz/partParticipant");
 						stompClient.subscribe("/quiz/selectedQuiz");
 						stompClient.subscribe("/quiz/startTimer");
+						stompClient.subscribe("/quiz/openCorrect");
+						stompClient.subscribe("/quiz/consolationmatch");
+						stompClient.subscribe("/quiz/cantgoldenbell");
 						stompClient.send("/app/participation", {}, JSON.stringify(data));
 					}
 
@@ -115,6 +120,12 @@
 								changeQuiz(message);
 							} else if (value.includes("startTimer")){
 								startTimer(message);
+							} else if(value.includes("openCorrect")){
+								updateList(message);
+							} else if(value.includes("consolationmatch")){
+								consolationMatchList(message);
+							} else if(value.includes("cantgoldenbell")){
+								cantGoldenBell(message);
 							}
 						}
 					}
@@ -170,10 +181,11 @@
 					let nickname = participantJSON.nickname;
 
 					let participantElement = document.createElement("div");
-					participantElement.id = "participantListElement"
-					let participantText = partId + "." + nickname + "<button id='btnOut' onclick='sendOut()'>-</button>"
+					participantElement.id = "participantListElement"+partId;
+					let participantText = partId + "." + nickname + "<button id='btnOut"+partId+"' onclick='sendOut("+partId+")'>-</button>"
 					participantElement.innerHTML = participantText;
 					participantList.appendChild(participantElement);
+					addCount();
 				}
 
 				function changeQuiz(quiz) {
@@ -212,7 +224,17 @@
 					stompClient.send("/app/changeParticipantState", {}, JSON.stringify(data));
 				}
 
-				function sendOut() {
+				function sendOut(partId) {
+					let data = {
+						"roomNum": roomNum,
+						"partId": "-1",
+						"type": "out",
+						"msg": partId
+					};
+					stompClient.send("/app/out", {}, JSON.stringify(data));
+
+					let id = "#participantListElement"+partId;
+					$(id).remove();
 
 				}
 
@@ -237,6 +259,44 @@
 						};
 						stompClient.send("/app/" + value, {}, JSON.stringify(data));
 					}
+				}
+
+				function updateList(message){
+					let updateListJSON = JSON.parse(message);
+					let list = updateListJSON.list;
+					// console.log(list);
+					for(var i = 0; i < list.length;i++){
+						let id = "#participantListElement"+list[i];
+						$(id).css("text-decoration","line-through");
+					}
+					subtractCount(list.length);
+				}
+
+				function consolationMatchList(message){
+					let updateListJSON = JSON.parse(message);
+					let list = updateListJSON.list;
+					console.log(list);
+					for(var i = 0; i < list.length;i++){
+						let listId = "#participantListElement"+list[i];
+               	    	$(listId).css("text-decoration","none");
+					}
+					instractCount(list.length);
+				}
+
+				function cantGoldenBell(){
+					$("#uploadResultBox").text("골든벨 모드를 할수 없습니다! 일반모드로 바꿔주세요")
+				}
+
+				function deleteRoom(){
+					let data = {
+							"roomNum": roomNum,
+							"partId": "-1",
+							"type": "delete",
+							"msg": "delete"
+						};
+					stompClient.send("/app/deleteRoom", {}, JSON.stringify(data))
+					sessionStorage.clear();
+					history.back();
 				}
 			</script>
 		</body>

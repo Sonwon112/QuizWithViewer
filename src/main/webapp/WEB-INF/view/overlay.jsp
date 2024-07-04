@@ -14,7 +14,7 @@
                 <label></label>
             </div>
             <div class="box" id="participantList">
-                <div style="font-size:large;font-weight:bold;padding:5px">참여자</div>
+                <div style="font-size:large;font-weight:bold;padding:5px" id="listTitle">참여자(00/00)</div>
                 <hr style="width: 100%;">
                 <div class="scroll" id="listElementBox"></div>
             </div>
@@ -26,11 +26,14 @@
             </div>
             <div class="innerBox" style="visibility: hidden;" id="Qanswer">정답</div>
         </div>
+
         <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
         <script type="text/javascript"
             src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
         <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
         <script src="/static/js/timer.js"></script>
+        <script src="/static/js/autoScroll.js"></script>
+        <script src="/static/js/counting.js"></script>
         <script type="text/javascript">
             let roomNum = '${quizRoom.roomNum}';
             const socket = new SockJS("/ws/init");
@@ -49,6 +52,9 @@
                         stompClient.subscribe("/quiz/submittedAnswer");
                         stompClient.subscribe("/quiz/openAnswer");
                         stompClient.subscribe("/quiz/openCorrect");
+                        stompClient.subscribe("/quiz/consolationmatch");
+                        stompClient.subscribe("/quiz/goldenbell");
+                        stompClient.subscribe("/quiz/outPlayer");
 						stompClient.send("/app/participation", {}, JSON.stringify(data));
 					}
 
@@ -68,9 +74,17 @@
                                 openParticipantAnswer();
                             }else if(value.includes("openCorrect")){
                                 openQuestionAnswer(message);
+                                updateList(message);
+                            }else if(value.includes("consolationmatch")){
+								consolationMatchList(message);
+							}else if(value.includes("goldenbell")){
+                                changeGoldenBellMode(message);
+                            }else if(value.includes("outPlayer")){
+                                updateList(message);
                             }
 						}
                     }
+                    setScrollMap();
             });
 
             function addParticipant(participant) {
@@ -81,6 +95,7 @@
 
                 appendElementTable(partId, nickname);
                 appendElementList(partId,nickname);
+                addCount();
             }
 
             function changeQuiz(quiz){
@@ -92,24 +107,28 @@
                 $("#question").text(question);
 
                 $("#Qanswer").css("visibility","hidden")
-                $("#Qanswer").text(answer);
+                $("#Qanswer").text("정답 : "+answer);
                 closeParticipantAnswer();
             }
 
             function appendElementTable(partId,nickname){
                 let elementId = "ptTableElement"+partId;
                 let answerId = "answer"+partId;
+                let imgX = "imgX"+partId;
+                let dropout = "dropout"+partId;
                 $("#participantTable").append(
                     $('<div>').prop({
                         id:elementId,
                         className:'box table-element',
-                        innerHTML:'<div class="text-center" id="tableTitle">'
+                        innerHTML:'<div class="imgX" id='+imgX+'></div>'
+                                   +'<div class="text-center" id="tableTitle">'
                                    +partId+'. '+nickname
                                    +'</div><hr>'+
-                                  '<div class="" id="answerBox">'+
-                                      '<div class="text-center answer" id='+answerId+' style="visibility:hidden">'+"정답"
+                                  '<div id="answerBox">'+
+                                      '<div class="text-center answer" id='+answerId+' style="visibility:hidden">'+""
                                       +'</div>'
                                  +'</div>'
+                                 +'<span class="dropout" id='+dropout+'></span>'
                     })
                 );
             }
@@ -125,14 +144,30 @@
             }
 
             function updateParticipantAnswer(answerjson){
-                console.log(answerjson);
+                // console.log(answerjson);
                 let answerJSON = JSON.parse(answerjson)
                 let partId = "#answer"+answerJSON.partId;
                 let answer = answerJSON.answer;
-                console.log(partId+"가 제출한 답은 "+answer);
+                
 
                 $(partId).text(answer);
             }
+
+            function updateList(message){
+				let updateListJSON = JSON.parse(message);
+				let list = updateListJSON.list;
+					// console.log(list);
+				for(var i = 0; i < list.length;i++){
+					let listId = "#ptListElement"+list[i];
+                    let imgX = "#imgX"+list[i]
+                    let dropout = "#dropout"+list[i]
+					console.log(listId+', '+imgX+', '+dropout);
+                    $(listId).css("text-decoration","line-through");
+                    $(imgX).css("visibility","visible");
+                    $(dropout).css("visibility","visible");
+				}
+                subtractCount(list.length);
+			}
 
             function openParticipantAnswer(){
                 // console.log("openAnswer");
@@ -145,6 +180,31 @@
 
             function openQuestionAnswer(message){
                 $("#Qanswer").css("visibility","visible");
+            }
+
+            function consolationMatchList(message){
+				let updateListJSON = JSON.parse(message);
+				let list = updateListJSON.list;
+					// console.log(list);
+				for(var i = 0; i < list.length;i++){
+					let listId = "#ptListElement"+list[i];
+                    let imgX = "#imgX"+list[i]
+                    let dropout = "#dropout"+list[i]
+					console.log(listId+', '+imgX+', '+dropout);
+                    $(listId).css("text-decoration","none");
+                    $(imgX).css("visibility","hidden");
+                    $(dropout).css("visibility","hidden");
+				}
+                instractCount(list.length);
+			}
+
+            function changeGoldenBellMode(message){
+                let lastParticipantJSON = JSON.parse(message);
+                let lastParticipantId = lastParticipantJSON.id;
+                let elementId = "#ptTableElement"+lastParticipantId;
+                $(".table-element").css("display","none");
+                $(elementId).css("display","");
+                $(elementId).css("width","50%");
             }
 
         </script>

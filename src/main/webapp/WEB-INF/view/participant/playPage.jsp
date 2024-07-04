@@ -15,7 +15,7 @@
 				<div class="dropout" id="imgX"></div>
 				<div id="info">${participant.partId}번 ${participant.nickname}</div>
 				<div id="questionBox">
-					<div id="difficulty">난이도</div>
+					<div id="difficulty">난</div>
 					<div id="question">문제</div>
 				</div>
 				<div id="inputBox">
@@ -46,7 +46,9 @@
 						stompClient.subscribe('/quiz/selectedQuiz');
 						stompClient.subscribe('/quiz/changePartState/' + partId);
 						stompClient.subscribe("/quiz/startTimer");
-						
+						stompClient.subscribe("/quiz/deleteRoom");
+						stompClient.subscribe("/quiz/out/"+partId);
+
 						let data = {
 							"roomNum": roomNum,
 							"partId": partId,
@@ -54,6 +56,7 @@
 							"msg": "request Participation"
 						};
 						stompClient.send("/app/participation", {}, JSON.stringify(data));
+						
 					}
 
 					socket.onmessage = (event) => {
@@ -68,6 +71,10 @@
 								changePartState(message);
 							} else if(value.includes("startTimer")){
 								startTimer(message);
+							} else if(value.includes("deleteRoom")){
+								out();
+							} else if(value.includes("out")){
+								out();
 							}
 						}
 					}
@@ -130,6 +137,9 @@
 						}
 					}
 
+					function out(){
+						history.back();
+					}
 			</script>
 
 		</body>
