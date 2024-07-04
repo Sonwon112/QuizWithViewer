@@ -1,6 +1,6 @@
 package service;
 
-import java.lang.module.FindException;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -64,6 +64,15 @@ public class QuizRoomService {
 	public void changeParticipantState(String roomNum, boolean state) {
 		QuizRoom qr = findQuizRoomByRoomNum(roomNum);
 		qr.setAllowParticipant(state);
+	}
+	
+	public int findGoldenBellParticipant(String roomNum) {
+		QuizRoom qr = findQuizRoomByRoomNum(roomNum);
+		List<Integer> survivedList = qr.findSurvivedParticipant();
+		if(survivedList.size() != 1) {
+			return -1;
+		}
+		return survivedList.get(0);
 	}
 	
 	

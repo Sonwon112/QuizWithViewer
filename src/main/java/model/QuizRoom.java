@@ -134,4 +134,14 @@ public class QuizRoom {
 		});
 		return dropOuttedList;
 	}
+	
+	public List<Integer> findSurvivedParticipant(){
+		List<Integer> survivedList = new ArrayList<>();
+		participantMap.forEach((i,p)->{
+			if(p.isPart()) {
+				survivedList.add(p.getPartId());
+			}
+		});
+		return survivedList;
+	}
 }

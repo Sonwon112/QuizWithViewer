@@ -92,6 +92,12 @@ public class StompController {
 			break;
 		case "GOLDEN_BELL":
 			currMode = QuizMode.GOLDEN_BELL;
+			int goldenBellParticipant = qrService.findGoldenBellParticipant(dto.getRoomNum());
+			if(goldenBellParticipant == -1){
+				template.convertAndSend("/quiz/cantgoldenbell","{\"msg\":\"can't goldenBell\"}");
+			}else {
+				template.convertAndSend("/quiz/goldenbell","{\"id\":\""+goldenBellParticipant+"\"}");
+			}
 			break;
 		case "CONSOLATION_MATCH":
 			currMode = QuizMode.CONSOLATION_MATCH;
@@ -179,5 +185,20 @@ public class StompController {
 		participantService.setAnswer(dto.getRoomNum(), dto.getPartId(), dto.getMsg());
 		String submittedAnswer = "{\"partId\":"+dto.getPartId()+",\"answer\":\""+dto.getMsg()+"\"}";
 		return submittedAnswer;
+	}
+	
+	@MessageMapping("/deleteRoom")
+	@SendTo("/quiz/deleteRoom")
+	public String deleteRoom(WebSocketDTO dto) {
+		qrService.removeQuizRoom(dto.getRoomNum());
+		return "{\"msg\":\"delete\"}";
+	}
+	
+	@MessageMapping("/out")
+	@SendTo("/quiz/outPlayer")
+	public String outParticipant(WebSocketDTO dto) {
+		participantService.removePartipant(dto.getRoomNum(), Integer.parseInt(dto.getMsg()));
+		template.convertAndSend("/quiz/out/"+dto.getMsg(),"{\"msg\":\"out\"}");
+		return "{\"msg\":\"openCorrect\",\"list\":["+dto.getMsg()+"]}";
 	}
 }

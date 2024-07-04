@@ -14,7 +14,7 @@
                 <label></label>
             </div>
             <div class="box" id="participantList">
-                <div style="font-size:large;font-weight:bold;padding:5px">참여자</div>
+                <div style="font-size:large;font-weight:bold;padding:5px" id="listTitle">참여자(00/00)</div>
                 <hr style="width: 100%;">
                 <div class="scroll" id="listElementBox"></div>
             </div>
@@ -33,6 +33,7 @@
         <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
         <script src="/static/js/timer.js"></script>
         <script src="/static/js/autoScroll.js"></script>
+        <script src="/static/js/counting.js"></script>
         <script type="text/javascript">
             let roomNum = '${quizRoom.roomNum}';
             const socket = new SockJS("/ws/init");
@@ -52,6 +53,8 @@
                         stompClient.subscribe("/quiz/openAnswer");
                         stompClient.subscribe("/quiz/openCorrect");
                         stompClient.subscribe("/quiz/consolationmatch");
+                        stompClient.subscribe("/quiz/goldenbell");
+                        stompClient.subscribe("/quiz/outPlayer");
 						stompClient.send("/app/participation", {}, JSON.stringify(data));
 					}
 
@@ -74,7 +77,11 @@
                                 updateList(message);
                             }else if(value.includes("consolationmatch")){
 								consolationMatchList(message);
-							}
+							}else if(value.includes("goldenbell")){
+                                changeGoldenBellMode(message);
+                            }else if(value.includes("outPlayer")){
+                                updateList(message);
+                            }
 						}
                     }
                     setScrollMap();
@@ -88,6 +95,7 @@
 
                 appendElementTable(partId, nickname);
                 appendElementList(partId,nickname);
+                addCount();
             }
 
             function changeQuiz(quiz){
@@ -158,6 +166,7 @@
                     $(imgX).css("visibility","visible");
                     $(dropout).css("visibility","visible");
 				}
+                subtractCount(list.length);
 			}
 
             function openParticipantAnswer(){
@@ -186,7 +195,17 @@
                     $(imgX).css("visibility","hidden");
                     $(dropout).css("visibility","hidden");
 				}
+                instractCount(list.length);
 			}
+
+            function changeGoldenBellMode(message){
+                let lastParticipantJSON = JSON.parse(message);
+                let lastParticipantId = lastParticipantJSON.id;
+                let elementId = "#ptTableElement"+lastParticipantId;
+                $(".table-element").css("display","none");
+                $(elementId).css("display","");
+                $(elementId).css("width","50%");
+            }
 
         </script>
     </body>
