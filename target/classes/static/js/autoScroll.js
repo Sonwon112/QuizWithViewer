@@ -2,9 +2,9 @@ let autoScrollMap = new Map();
 let scrollTopMap = new Map();
 
 function setScrollMap(){
-    console.log("set Auto Scroll")
+    //console.log("set Auto Scroll")
     let scrollElement = document.getElementsByClassName("scroll");
-    console.log(scrollElement);
+    //console.log(scrollElement);
     for(var i = 0; i < scrollElement.length; i++){
         autoScrollMap.set(scrollElement[i],"down");
 		scrollTopMap.set(scrollElement[i],scrollElement[i].scrollTop);

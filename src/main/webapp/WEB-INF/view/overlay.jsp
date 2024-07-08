@@ -15,10 +15,10 @@
             <div class="box scroll" id="participantTable">
                 <label></label>
             </div>
-            <div>
-                <img sr="/static/img/logo.png">
+            <div class="list-block">
+                <img id="imgLogo" src="/static/img/logo.png">
                 <div class="box" id="participantList">
-                    <div style="font-size:large;font-weight:bold;padding:5px" id="listTitle">참여자</div>
+                    <div style="font-size:1.8em;font-weight:bold;padding:5px" id="listTitle">참여자</div>
                     <hr style="width: 100%;">
                     <div class="scroll" id="listElementBox"></div>
                 </div>
@@ -44,7 +44,7 @@
             const socket = new SockJS("/ws/init");
             let stompClient = Stomp.over(socket);
             stompClient.debug = null;
-            
+
             document.addEventListener("DOMContentLoaded", function () {
                 socket.onopen = () => {
                     let data = {
@@ -153,7 +153,7 @@
             function appendElementList(partId, nickname) {
                 let elementId = 'ptListElement' + partId;
                 $("#listElementBox").append(
-                    $('<div style="text-aligh:center;">').prop({
+                    $('<div class="listElement">').prop({
                         id: elementId,
                         innerHTML: partId + '. ' + nickname
                     })
