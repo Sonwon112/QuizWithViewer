@@ -5,6 +5,8 @@
 
 		<head>
 			<meta charset="UTF-8">
+			<link rel="icon" href="/static/img/favicon.png"/>
+        	<link rel="apple-touch-icon" href="/static/img/favicon.png"/>
 			<title>관리자 페이지</title>
 			<link href="/static/css/admin.css" rel="stylesheet" />
 
@@ -86,8 +88,9 @@
 				let roomNum = '${quizRoom.roomNum}';
 				const socket = new SockJS("/ws/init");
 				let stompClient = Stomp.over(socket);
+				stompClient.debug = null;
 
-				socket.debug = null;
+				
 				document.addEventListener("DOMContentLoaded", function () {
 
 					participantList = document.getElementById("listElementBox");
@@ -190,7 +193,7 @@
 
 				function changeQuiz(quiz) {
 					let quizJSON = JSON.parse(quiz)
-					let difficulty = quizJSON.difficulty === "아이스" ? "하" : quizJSON.difficulty;
+					let difficulty = quizJSON.difficulty === "아이스" ? "빙" : quizJSON.difficulty;
 
 					let answer = "정답 : " + quizJSON.answer;
 					let question = "난이도 : " + difficulty + "<br>" + quizJSON.num + ". " + quizJSON.question
