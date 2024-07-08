@@ -4,7 +4,7 @@
 
     <head>
         <meta charset="UTF-8">
-        <title>송출용 오버레이</title>
+        <title>도전! 니야 골든벨</title>
         <link href="/static/css/overlay.css" rel="stylesheet" />
     </head>
 
@@ -161,7 +161,7 @@
 					let listId = "#ptListElement"+list[i];
                     let imgX = "#imgX"+list[i]
                     let dropout = "#dropout"+list[i]
-					console.log(listId+', '+imgX+', '+dropout);
+					//console.log(listId+', '+imgX+', '+dropout);
                     $(listId).css("text-decoration","line-through");
                     $(imgX).css("visibility","visible");
                     $(dropout).css("visibility","visible");
@@ -190,7 +190,7 @@
 					let listId = "#ptListElement"+list[i];
                     let imgX = "#imgX"+list[i]
                     let dropout = "#dropout"+list[i]
-					console.log(listId+', '+imgX+', '+dropout);
+					//console.log(listId+', '+imgX+', '+dropout);
                     $(listId).css("text-decoration","none");
                     $(imgX).css("visibility","hidden");
                     $(dropout).css("visibility","hidden");

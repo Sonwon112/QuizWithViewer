@@ -15,33 +15,37 @@ function setScrollMap(){
 }
 
 
-function scrollTable(target) {  
+function scrollTable(target) {
+	let standardScrollTop = target.scrollTop;
     setInterval(() => {
         let direction = autoScrollMap.get(target);
         let prevScrollTop = scrollTopMap.get(target);
 				//console.log(target,direction)
-        if(direction=="down"){
-            target.scrollTop = target.scrollTop + 2;
-			if(target.scrollTop != prevScrollTop){
-				if (target.offsetHeight + target.scrollTop >= target.scrollHeight) {
-					autoScrollMap.set(target,"up");
+		if(target.scrollHeight > standardScrollTop+600){
+			if(direction=="down"){
+				target.scrollTop = target.scrollTop + 2;
+				if(target.scrollTop != prevScrollTop){
+					if (target.offsetHeight + target.scrollTop >= target.scrollHeight) {
+						autoScrollMap.set(target,"up");
+					}
+				}else{
+					direction = "up";
 				}
+				
 			}else{
-				direction = "up";
+				target.scrollTop = target.scrollTop - 2;
+				if(target.scrollTop != prevScrollTop){
+					if (target.offsetHeight + target.scrollTop <= target.offsetHeight) {
+						autoScrollMap.set(target,"down");
+					}
+				}else{
+					direction = "down";
+				}
 			}
-            
-        }else{
-            target.scrollTop = target.scrollTop - 2;
-			if(target.scrollTop != prevScrollTop){
-				if (target.offsetHeight + target.scrollTop <= target.offsetHeight) {
-                	autoScrollMap.set(target,"down");
-            	}
-			}else{
-				direction = "down";
-			}
-        }
-		scrollTopMap.set(target,target.scrollTop);
+			scrollTopMap.set(target,target.scrollTop);
+		}
+        
 		
-    }, 100);
+    }, 50);
     
 }
