@@ -33,18 +33,19 @@ body{
 }
 
 #difficulty{
-    width: 1.5em;
-    height: 1.5em;
+    left:0px;
+    width: 80px;
+    height: 80px;
     background-color:rgb(42, 60, 101);
     color:white;
-    border-radius: 0.75em;
-    line-height: 1.5em;
+    border-radius: 40px;
+    line-height: 80px;
+    font-size:1.8em;
     position:absolute;
 }
 
 #question{
-    width: 70%;
-    margin-left: 20%;
+    width: 100%;
     font-size: 0.6em;
     max-height: 150px;
     word-break: break-all;
@@ -65,8 +66,9 @@ body{
 
 #answer{
     height: 100%;
-    width: 76%;
+    width: 50%;
     font-size: 1.8em;
+    margin-left:8%;
 }
 #answer:focus{
     outline: none;
@@ -74,14 +76,10 @@ body{
 
 #sendAnswerBtn{
     height: 100%;
-    font-size: 3em;
-    background: none;
-    border: 0;
+    font-size: 1.5em;
+    margin-left:5%;
 }
 
-#sendAnswerBtn:hover{
-    color:gray;
-}
 
 
 #timer{
@@ -172,3 +170,7 @@ body{
     outline:none;
 }
 
+.flex{
+    display: flex;
+    justify-content: center;
+}

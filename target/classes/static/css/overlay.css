@@ -8,12 +8,12 @@
 
 .innerBox{
     width:70%;
-    margin:2% auto;
+    margin:0 auto;
     padding:5px;
-    max-height: 100px;
     text-align: center;
     font-weight: bold;
     font-size: 1.3em;
+    aspect-ratio: 10/1;
 }
 
 .table-element{
@@ -93,10 +93,10 @@
 }
 
 #questionBox{
-    display: flex;
-    justify-content: center;
     position: relative;
 }
+
+#ques
 
 #difficulty{
     position:absolute;
@@ -109,10 +109,8 @@
     color:white;
     font-weight: bold;
     font-size: 3em;
-    text-align: center;
-    position:absolute;
     top:50%;
-    margin-top:-25px;
+    margin-top:-70px;
     left:4%;
 }
 

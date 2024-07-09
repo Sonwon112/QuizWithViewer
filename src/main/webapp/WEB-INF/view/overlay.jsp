@@ -26,11 +26,12 @@
             
         </div>
         <div class="box" id="QnABox">
-            <div id="questionBox">
-                <div id="difficulty">난</div>
-                <div class="innerBox" id="question">현재 출제된 문제가 없습니다.</div>
+            <div id="difficulty">난</div>
+            <div id="questionBox"> 
+                <div class="innerBox scroll" id="question">현재 출제된 문제가 없습니다.</div>
+                <div class="innerBox" style="visibility: hidden;margin-top:1%;" id="Qanswer">정답</div>
             </div>
-            <div class="innerBox" style="visibility: hidden;" id="Qanswer">정답</div>
+            
         </div>
 
         <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
@@ -121,7 +122,7 @@
                 let question = quizJSON.question;
                 let answer = quizJSON.answer;
                 $("#difficulty").text(difficulty);
-                $("#question").text(question);
+                $("#question").html(question);
 
                 $("#Qanswer").css("visibility", "hidden")
                 $("#Qanswer").text("정답 : " + answer);

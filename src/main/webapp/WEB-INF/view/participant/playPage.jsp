@@ -17,12 +17,12 @@
 				<div class="dropout" id="imgX"></div>
 				<div id="info">${participant.partId}번 ${participant.nickname}</div>
 				<div id="questionBox">
-					<div id="difficulty">난</div>
 					<div id="question">문제</div>
 				</div>
-				<div id="inputBox">
+				<div id="inputBox" class="flex">
+					<div id="difficulty">난</div>
 					<input class="input-text" id="answer" type="text" name="answer" />
-					<button id="sendAnswerBtn" onclick="sendAnswer()"> ↲</button>
+					<button id="sendAnswerBtn" onclick="sendAnswer()"> 제출</button>
 				</div>
 				<div style="visibility: hidden" id="resultTxt">제출됨!</div>
 				<div id="timer">--</div>
@@ -132,7 +132,7 @@
 
 					if (quizJSON.question != "더 이상 문제가 존재하지 않습니다") {
 						$("#difficulty").text(difficulty);
-						$("#question").text(question);
+						$("#question").html(question);
 						setTime(second);
 					}
 				}
