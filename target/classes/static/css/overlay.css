@@ -78,6 +78,7 @@
     display: flex;
     align-content: center;
     flex-direction: column;
+    position: relative;
 }
 
 #answerBox{
@@ -95,8 +96,6 @@
 #questionBox{
     position: relative;
 }
-
-#ques
 
 #difficulty{
     position:absolute;

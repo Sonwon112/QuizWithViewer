@@ -18,59 +18,42 @@ import model.QuizRoom;
 
 @Repository
 public class QuizRepository {
-	
+
 	private Map<String, List<Quiz>> quizMap = new HashMap<>();
-	
-	
-	public void getQuizToFile(String roomNum,InputStream in) throws IOException{
+
+	public void getQuizToFile(String roomNum, InputStream in) throws IOException {
 		InputStreamReader reader = new InputStreamReader(in);
 		BufferedReader bf = new BufferedReader(reader);
 		List<Quiz> quizList = new ArrayList<Quiz>();
-		
+
 		String line = "";
-		while((line=bf.readLine())!=null) {
+		while ((line = bf.readLine()) != null) {
 			String[] tmp = line.split(";");
-			Quiz quiz = new Quiz(tmp[0],tmp[1],tmp[2]);
+			Quiz quiz = new Quiz(tmp[0], tmp[1], tmp[2]);
 			quizList.add(quiz);
 		}
-		
+
 		quizMap.put(roomNum, quizList);
 //		System.out.println(quizMap.size());
 //		System.out.println(quizMap.get(roomNum).size());
 	}
-	
+
 	public void selectQuiz(QuizRoom qr) throws IndexOutOfBoundsException {
 		String roomNum = qr.getRoomNum();
 		List<Quiz> qList = quizMap.get(roomNum);
-		Quiz q = new Quiz("더 이상 문제가 존재하지 않습니다","","");
-		
-		if(qr.getCurrMode() == QuizMode.ICEBREAKING) {
-			ArrayList<Quiz> iceQList = new ArrayList<Quiz>();
-			try {
-				iceQList.addAll(qList.stream().filter(v->!v.isSubmitted()).filter(v->v.getDifficulty().equals("아이스")).toList());
-				Collections.shuffle(iceQList);
-				q = iceQList.get(0);
-				q.setSubmitted(true);
-			}catch (Exception e) {
-				// TODO: handle exception
-				e.printStackTrace();
-			}finally {
-				qr.setCurrQuiz(q);
-				qr.updateCurrQuizNum();
-			}
-			return;
-		}
-		
-		ArrayList<Quiz> fQList = new ArrayList<Quiz>();
+		Quiz q = new Quiz("더 이상 문제가 존재하지 않습니다", "", "");
+
+		ArrayList<Quiz> QList = new ArrayList<Quiz>();
 		try {
-			fQList.addAll(qList.stream().filter(v->!v.isSubmitted()).toList());
-			Collections.shuffle(fQList);
-			q = fQList.get(0);
+			QList.addAll(
+					qList.stream().filter(v -> !v.isSubmitted()).filter(v -> v.getDifficulty().equals(qr.getTargetDifficulty())).toList());
+			Collections.shuffle(QList);
+			q = QList.get(0);
 			q.setSubmitted(true);
-		}catch (Exception e) {
+		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
-		}finally {
+		} finally {
 			qr.setCurrQuiz(q);
 			qr.updateCurrQuizNum();
 		}

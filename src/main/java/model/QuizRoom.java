@@ -9,10 +9,11 @@ import java.util.Random;
 import customEnum.QuizMode;
 
 public class QuizRoom {
+
 	
-	private static int leftLimit = 48;
-	private static int rightLimit = 122;
-	private static int roomNumLength = 10;
+	private static final int leftLimit = 48;
+	private static final int rightLimit = 122;
+	private static final int roomNumLength = 10;
 	private Random rand = new Random();
 	
 	private String roomNum;
@@ -24,6 +25,7 @@ public class QuizRoom {
 	private int currParticipantNum = 0;
 	
 	private QuizMode currMode = QuizMode.DEFAULT;
+	private String targetDifficulty = "하";
 	private Quiz currQuiz;
 	private int currQuizNum;
 	
@@ -53,17 +55,6 @@ public class QuizRoom {
 		return participantMap;
 	}
 	
-	public void addParticipantToMap(Participant participant) {
-		currParticipantNum+=1;
-		participantLastNum = currParticipantNum;
-		participant.setPartId(participantLastNum);
-		participantMap.put(participantLastNum, participant);
-	}
-	
-	public void removeParticipantToMap(int id) {
-		participantMap.remove(id);
-		currParticipantNum-=1;
-	}
 
 	public QuizMode getCurrMode() {
 		return currMode;
@@ -80,7 +71,46 @@ public class QuizRoom {
 	public void setCurrQuiz(Quiz currQuiz) {
 		this.currQuiz = currQuiz;
 	}
+	
+	public int getCurrQuizNum() {
+		return currQuizNum;
+	}
 
+	public void updateCurrQuizNum() {
+		currQuizNum+=1;
+	}
+
+	public boolean isAllowParticipant() {
+		return isAllowParticipant;
+	}
+
+	public void setAllowParticipant(boolean isAllowParticipant) {
+		this.isAllowParticipant = isAllowParticipant;
+	}
+	
+	public String getTargetDifficulty() {
+		return targetDifficulty;
+	}
+
+	public void setTargetDifficulty(String targetDifficulty) {
+		this.targetDifficulty = targetDifficulty;
+	}
+
+	
+	
+	
+	public void addParticipantToMap(Participant participant) {
+		currParticipantNum+=1;
+		participantLastNum = currParticipantNum;
+		participant.setPartId(participantLastNum);
+		participantMap.put(participantLastNum, participant);
+	}
+	
+	public void removeParticipantToMap(int id) {
+		participantMap.remove(id);
+		currParticipantNum-=1;
+	}
+	
 	public List<Integer> CompareAnswer() {
 		List<Integer> dropOutList = new ArrayList<>();
 		switch (currMode.name()) {
@@ -108,21 +138,7 @@ public class QuizRoom {
 		return dropOutList;
 	}
 
-	public int getCurrQuizNum() {
-		return currQuizNum;
-	}
-
-	public void updateCurrQuizNum() {
-		currQuizNum+=1;
-	}
-
-	public boolean isAllowParticipant() {
-		return isAllowParticipant;
-	}
-
-	public void setAllowParticipant(boolean isAllowParticipant) {
-		this.isAllowParticipant = isAllowParticipant;
-	}
+	
 	
 	public List<Integer> findDropOutParticipant() {
 		List<Integer> dropOuttedList = new ArrayList<>();
