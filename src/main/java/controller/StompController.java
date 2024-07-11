@@ -159,12 +159,10 @@ public class StompController {
 	@SendTo("/quiz/openCorrect")
 	public String OpenCorrect(WebSocketDTO dto) {
 		log.info("Room : "+dto.getRoomNum()+", member : "+dto.getPartId()+", request Open Correct Answer: "+dto.getMsg());
+		QuizRoom qr = qrService.findQuizRoomByRoomNum(dto.getRoomNum());
+		
 		List<Integer> dropOutParticipant = participantService.CompareAnswer(dto.getRoomNum());
 		
-		for(int id : dropOutParticipant) {
-			template.convertAndSend("/quiz/changePartState/"+id,"{\"state\":\"false\"}");
-			log.info("send state");
-		}
 		String listToJSON ="";
 		try {
 			listToJSON = mapper.writeValueAsString(dropOutParticipant);
@@ -172,6 +170,20 @@ public class StompController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		if(qr.getCurrMode() == QuizMode.GOLDEN_BELL) {
+			String state = "";
+			if(dropOutParticipant.size() > 0) state = "fail";
+			else state = "success";
+			template.convertAndSend("/quiz/goldenBellResult","{\"msg\":\""+state+"\",\"list\":"+listToJSON+"}");
+			return "";
+		}
+		
+		for(int id : dropOutParticipant) {
+			template.convertAndSend("/quiz/changePartState/"+id,"{\"state\":\"false\"}");
+			log.info("send state");
+		}
+		
 		return "{\"msg\":\"openCorrect\",\"list\":"+listToJSON+"}";
 	}
 	

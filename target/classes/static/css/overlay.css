@@ -123,6 +123,38 @@
     padding-left: 2%;
 }
 
+#openResult{
+    position: absolute;
+    width:50%;
+    aspect-ratio: 4/3;
+    left:50%;
+    margin-left:-25%;
+    top:50%;
+    margin-top:-18.75%;
+    font-size: 5em;
+    font-weight: bold;
+    border-radius: 20px;
+    background-color: rgb(250, 255, 184);
+    border:none;
+}
+
+#openResult:hover{
+    font-size: 6em;
+    color:white;
+    background-color: rgb(193, 199, 131);;
+}
+
+#successGoldenBell{
+    position:absolute;
+    width:92%;
+    aspect-ratio: 10/2;
+    left:50%;
+    margin-left:-46%;
+    top: 50%;
+    margin-top:-9.2%;  
+}
+
+
 .imgX{
     position: absolute;
     background-image: url(/static/img/x.png);

@@ -4,8 +4,8 @@
 
     <head>
         <meta charset="UTF-8">
-        <link rel="icon" href="/static/img/favicon.png"/>
-        <link rel="apple-touch-icon" href="/static/img/favicon.png"/>
+        <link rel="icon" href="/static/img/favicon.png" />
+        <link rel="apple-touch-icon" href="/static/img/favicon.png" />
         <title>도전! 니야 골든벨</title>
         <link href="/static/css/overlay.css" rel="stylesheet" />
     </head>
@@ -23,16 +23,21 @@
                     <div class="scroll" id="listElementBox"></div>
                 </div>
             </div>
-            
+
         </div>
         <div class="box" id="QnABox">
             <div id="difficulty">난</div>
-            <div id="questionBox"> 
+            <div id="questionBox">
                 <div class="innerBox scroll" id="question">현재 출제된 문제가 없습니다.</div>
                 <div class="innerBox" style="visibility: hidden;margin-top:1%;" id="Qanswer">정답</div>
             </div>
-            
         </div>
+        <div id="resultImgBox" style="display: none;">
+            <img src="/static/img/goldenbell.png" id="successGoldenBell" style="display: none;">
+            <button id="openResult">공개</button>
+        </div>
+        <audio id="successSrc" src="/static/audio/success.mp3"></audio>
+        <audio id="failSrc" src="/static/audio/fail.mp3"></audio>
 
         <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
         <script type="text/javascript"
@@ -40,13 +45,15 @@
         <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
         <script src="/static/js/timer.js"></script>
         <script src="/static/js/autoScroll.js"></script>
+        <script src="/static/js/howler.min.js"></script>
         <script type="text/javascript">
             let roomNum = '${quizRoom.roomNum}';
             const socket = new SockJS("/ws/init");
             let stompClient = Stomp.over(socket);
             stompClient.debug = null;
-
+            let sound;
             document.addEventListener("DOMContentLoaded", function () {
+
                 socket.onopen = () => {
                     let data = {
                         "roomNum": roomNum,
@@ -62,6 +69,7 @@
                     stompClient.subscribe("/quiz/consolationmatch");
                     stompClient.subscribe("/quiz/goldenbell");
                     stompClient.subscribe("/quiz/outPlayer");
+                    stompClient.subscribe("/quiz/goldenBellResult");
                     stompClient.send("/app/participation", {}, JSON.stringify(data));
                 }
 
@@ -88,10 +96,34 @@
                             changeGoldenBellMode(message);
                         } else if (value.includes("outPlayer")) {
                             updateList(message);
+                        } else if (value.includes("goldenBellResult")) {
+                            showGoldenBellResult(message);
                         }
                     }
                 }
                 setScrollMap();
+                $("#openResult").click(()=>{
+                    const context = new AudioContext();
+                    context.resume().then(()=>{
+                        sound.play();
+                    });
+                    $("#openResult").css("display","none");
+                    switch(goldenbellResult){
+                        case "success":
+                            $("#successGoldenBell").css("display","");
+                            $("#Qanswer").css("visibility", "visible");
+                            break;
+                        case "fail":
+                            let listId = "#ptListElement" + goldenBellParticipantId;
+                            let imgX = "#imgX" + goldenBellParticipantId;
+                            let dropout = "#dropout" + goldenBellParticipantId;
+                            //console.log(listId+', '+imgX+', '+dropout);
+                            $(listId).css("text-decoration", "line-through");
+                            $(imgX).css("visibility", "visible");
+                            $(dropout).css("visibility", "visible");
+                            break;    
+                    }
+                });
             });
 
             function addParticipant(participant) {
@@ -213,16 +245,55 @@
                     $(dropout).css("visibility", "hidden");
                 }
             }
+            
+            let goldenBellParticipantId;
 
             function changeGoldenBellMode(message) {
                 let lastParticipantJSON = JSON.parse(message);
                 let lastParticipantId = lastParticipantJSON.id;
+                goldenBellParticipantId = lastParticipantId;
                 let elementId = "#ptTableElement" + lastParticipantId;
                 $(".table-element").css("display", "none");
                 $(elementId).css("display", "");
                 $(elementId).css("width", "50%");
             }
 
+
+            let goldenbellResult = "";
+            function showGoldenBellResult(message) {
+                let resultJSON = JSON.parse(message);
+                goldenbellResult = resultJSON.msg;
+
+
+                switch(goldenbellResult){
+                    case "success":
+                        sound = new Howl({
+                            src:['/static/audio/success.mp3'],
+                            volume:0.2,
+                            onend:()=>{
+                                // cosole.log('Finished!');
+                            }
+                        });
+                        break;
+                    case "fail":
+                    sound = new Howl({
+                            src:['/static/audio/fail.mp3'],
+                            volume:0.2,
+                            onend:()=>{
+                                // cosole.log('Finished!');
+                            }
+                        });
+                        break;
+                } 
+
+                $("#resultImgBox").css("display", "");
+            }
+
+
+
+            
+               
+            
         </script>
     </body>
 
