@@ -21,7 +21,7 @@
 				</div>
 				<div id="inputBox" class="flex">
 					<div id="difficulty">난</div>
-					<input class="input-text" id="answer" type="text" name="answer" />
+					<input class="input-text" id="answer" type="text" name="answer" onkeyup="enterKey()"/>
 					<button id="sendAnswerBtn" onclick="sendAnswer()"> 제출</button>
 				</div>
 				<div style="visibility: hidden" id="resultTxt">제출됨!</div>
@@ -90,6 +90,12 @@
 
 					// setScrollMap();
 				});
+
+				function enterKey(){
+					if(window.event.keyCode == 13){
+						sendAnswer();
+					}
+				}
 
 				function sendAnswer() {
 					// console.log("call sendAnswer")/
