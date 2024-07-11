@@ -77,18 +77,29 @@ public class StompController {
 		participantService.removePartipant(dto.getRoomNum(), dto.getPartId());
 	}
 	
+	@MessageMapping("/changeDifficulty")
+	public void ChangeDifficulty(WebSocketDTO dto) {
+		log.info("Room : "+dto.getRoomNum()+", member : "+dto.getPartId()+", changeDifficulty : "+dto.getMsg());
+		QuizRoom qr = qrService.findQuizRoomByRoomNum(dto.getRoomNum());
+		if(qr.getCurrMode() == QuizMode.DEFAULT) {
+			qrService.changeTargetDifficulty(dto.getRoomNum(), dto.getMsg());
+		}
+	}
 	
 	@MessageMapping("/changeMode")
 	public void ChangeMode(WebSocketDTO dto) {
 		log.info("Room : "+dto.getRoomNum()+", member : "+dto.getPartId()+", changeMode : "+dto.getMsg());
 		QuizMode currMode = null;
+		String targetDifficulty = "";
 		
 		switch (dto.getMsg()) {
 		case "DEFAULT":
 			currMode = QuizMode.DEFAULT;
+			targetDifficulty="하";
 			break;
 		case "ICEBREAKING":
 			currMode = QuizMode.ICEBREAKING;
+			targetDifficulty="아이스";
 			break;
 		case "GOLDEN_BELL":
 			currMode = QuizMode.GOLDEN_BELL;
@@ -98,6 +109,7 @@ public class StompController {
 			}else {
 				template.convertAndSend("/quiz/goldenbell","{\"id\":\""+goldenBellParticipant+"\"}");
 			}
+			targetDifficulty="상";
 			break;
 		case "CONSOLATION_MATCH":
 			currMode = QuizMode.CONSOLATION_MATCH;
@@ -115,10 +127,12 @@ public class StompController {
 				e.printStackTrace();
 			}
 			template.convertAndSend("/quiz/consolationmatch", "{\"msg\":\"consolation match\",\"list\":"+listToJSON+"}");
+			targetDifficulty="하";
 			break;
 		}
 		
 		qrService.changeQuizRoomMode(dto.getRoomNum(), currMode);
+		qrService.changeTargetDifficulty(dto.getRoomNum(), targetDifficulty);
 	}
 	
 	@MessageMapping("/changeParticipantState")
@@ -145,12 +159,10 @@ public class StompController {
 	@SendTo("/quiz/openCorrect")
 	public String OpenCorrect(WebSocketDTO dto) {
 		log.info("Room : "+dto.getRoomNum()+", member : "+dto.getPartId()+", request Open Correct Answer: "+dto.getMsg());
+		QuizRoom qr = qrService.findQuizRoomByRoomNum(dto.getRoomNum());
+		
 		List<Integer> dropOutParticipant = participantService.CompareAnswer(dto.getRoomNum());
 		
-		for(int id : dropOutParticipant) {
-			template.convertAndSend("/quiz/changePartState/"+id,"{\"state\":\"false\"}");
-			log.info("send state");
-		}
 		String listToJSON ="";
 		try {
 			listToJSON = mapper.writeValueAsString(dropOutParticipant);
@@ -158,6 +170,20 @@ public class StompController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		if(qr.getCurrMode() == QuizMode.GOLDEN_BELL) {
+			String state = "";
+			if(dropOutParticipant.size() > 0) state = "fail";
+			else state = "success";
+			template.convertAndSend("/quiz/goldenBellResult","{\"msg\":\""+state+"\",\"list\":"+listToJSON+"}");
+			return "";
+		}
+		
+		for(int id : dropOutParticipant) {
+			template.convertAndSend("/quiz/changePartState/"+id,"{\"state\":\"false\"}");
+			log.info("send state");
+		}
+		
 		return "{\"msg\":\"openCorrect\",\"list\":"+listToJSON+"}";
 	}
 	

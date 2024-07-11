@@ -13,7 +13,7 @@ function instractCount(cnt){
 }
 
 function subtractCount(cnt){
-    currCount -= cnt;
+    currCount = currCount <= 0 ? 0 : currCount-cnt;
     displayCnt();
 }
 

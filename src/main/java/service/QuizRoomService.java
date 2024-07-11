@@ -60,12 +60,20 @@ public class QuizRoomService {
 		QuizRoom qr = findQuizRoomByRoomNum(roomNum);
 		qr.setCurrMode(mode);
 	}
-	
+	/**
+	 * 
+	 * @param roomNum
+	 * @param state
+	 */
 	public void changeParticipantState(String roomNum, boolean state) {
 		QuizRoom qr = findQuizRoomByRoomNum(roomNum);
 		qr.setAllowParticipant(state);
 	}
-	
+	/**
+	 * 
+	 * @param roomNum
+	 * @return
+	 */
 	public int findGoldenBellParticipant(String roomNum) {
 		QuizRoom qr = findQuizRoomByRoomNum(roomNum);
 		List<Integer> survivedList = qr.findSurvivedParticipant();
@@ -75,5 +83,14 @@ public class QuizRoomService {
 		return survivedList.get(0);
 	}
 	
+	/**
+	 * 
+	 * @param roomNum
+	 * @param targetDifficulty
+	 */
+	public void changeTargetDifficulty(String roomNum, String targetDifficulty) {
+		QuizRoom qr = findQuizRoomByRoomNum(roomNum);
+		qr.setTargetDifficulty(targetDifficulty);
+	}
 	
 }

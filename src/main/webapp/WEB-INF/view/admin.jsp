@@ -5,6 +5,8 @@
 
 		<head>
 			<meta charset="UTF-8">
+			<link rel="icon" href="/static/img/favicon.png"/>
+        	<link rel="apple-touch-icon" href="/static/img/favicon.png"/>
 			<title>관리자 페이지</title>
 			<link href="/static/css/admin.css" rel="stylesheet" />
 
@@ -23,7 +25,7 @@
 					<div class="subtitle">문제</div>
 					<hr>
 					<!--문제 모드 설정-->
-					<div class="box quiz" v>
+					<div class="box quiz">
 						<div>
 							문제파일 : <input type="file" name="file" />
 							<button id="uploadBtn">업로드</button>
@@ -34,6 +36,11 @@
 						<input type="radio" name="mode" value="ICEBREAKING" onclick="sendMode()" />아이스브레이킹
 						<input type="radio" name="mode" value="GOLDEN_BELL" onclick="sendMode()" />골든벨
 						<input type="radio" name="mode" value="CONSOLATION_MATCH" onclick="sendMode()" />패자부활전
+						<br>
+						난이도:
+						<input type="radio" name="targetDifficulty" value="하" onclick="sendDifficulty()" checked="checked"/> 하
+						<input type="radio" name="targetDifficulty" value="중" onclick="sendDifficulty()"/> 중
+						<input type="radio" name="targetDifficulty" value="상" onclick="sendDifficulty()"/> 상
 					</div>
 					<!--문제 출제/답안 공개/정답 공개-->
 					<div class="box quiz">
@@ -86,8 +93,9 @@
 				let roomNum = '${quizRoom.roomNum}';
 				const socket = new SockJS("/ws/init");
 				let stompClient = Stomp.over(socket);
+				stompClient.debug = null;
 
-				socket.debug = null;
+				
 				document.addEventListener("DOMContentLoaded", function () {
 
 					participantList = document.getElementById("listElementBox");
@@ -190,7 +198,7 @@
 
 				function changeQuiz(quiz) {
 					let quizJSON = JSON.parse(quiz)
-					let difficulty = quizJSON.difficulty === "아이스" ? "하" : quizJSON.difficulty;
+					let difficulty = quizJSON.difficulty === "아이스" ? "빙" : quizJSON.difficulty;
 
 					let answer = "정답 : " + quizJSON.answer;
 					let question = "난이도 : " + difficulty + "<br>" + quizJSON.num + ". " + quizJSON.question
@@ -247,6 +255,17 @@
 						"msg": value
 					};
 					stompClient.send("/app/changeMode", {}, JSON.stringify(data))
+				}
+
+				function sendDifficulty() {
+					let value = $("input:radio[name='targetDifficulty']:checked")[0].value;
+					let data = {
+						"roomNum": roomNum,
+						"partId": "-1",
+						"type": "changeDifficulty",
+						"msg": value
+					};
+					stompClient.send("/app/changeDifficulty", {}, JSON.stringify(data))
 				}
 
 				function sendAction(value) {
