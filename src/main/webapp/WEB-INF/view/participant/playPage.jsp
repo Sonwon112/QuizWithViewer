@@ -14,6 +14,7 @@
 
 		<body>
 			<div id="background">
+				<div style="display:none;" id="imgO"></div>
 				<div class="dropout" id="imgX"></div>
 				<div id="info">${participant.partId}번 ${participant.nickname}</div>
 				<div id="questionBox">
@@ -49,6 +50,7 @@
 						stompClient.subscribe('/quiz/changePartState/' + partId);
 						stompClient.subscribe("/quiz/startTimer");
 						stompClient.subscribe("/quiz/deleteRoom");
+						stompClient.subscribe("/quiz/openCorrect");
 						stompClient.subscribe("/quiz/out/" + partId);
 
 						let data = {
@@ -64,7 +66,7 @@
 					socket.onmessage = (event) => {
 						let value = event.data;
 						let startPoint = value.indexOf('{');
-						console.log(event);
+						// console.log(event);
 						if (startPoint != -1) {
 							let message = value.substring(startPoint, value.length - 1);
 							if (value.includes("selectedQuiz")) {
@@ -77,6 +79,8 @@
 								out();
 							} else if (value.includes("out")) {
 								out();
+							} else if (value.includes("openCorrect")){
+								showCorrect(message);
 							}
 						}
 					}
@@ -112,12 +116,15 @@
 						stompClient.send("/app/submitAnswer", {}, JSON.stringify(data));
 						$("#resultTxt").css("visibility", "visible");
 						$("#resultTxt").css("display", "");
-						$("#resultTxt").fadeOut('slow');
+						$("#resultTxt").fadeOut(3000);
 					}
 
 				}
 
+				
+
 				function changeQuiz(quiz) {
+					currState = "start";
 					let quizJSON = JSON.parse(quiz)
 					let difficulty = quizJSON.difficulty === "아이스" ? "빙" : quizJSON.difficulty;
 					switch (difficulty) {
@@ -135,7 +142,7 @@
 					let question = quizJSON.num + ". " + quizJSON.question
 
 					let second = difficulty === "上" ? 15 : 10;
-
+					$("#answer").val('');
 					if (quizJSON.question != "더 이상 문제가 존재하지 않습니다") {
 						$("#difficulty").text(difficulty);
 						$("#question").html(question);
@@ -160,6 +167,20 @@
 				function out() {
 					history.back();
 				}
+
+				function showCorrect(message){
+					let dropoutJSON =JSON.parse(message);
+					let dropoutList = dropoutJSON.list;
+					// console.log(typeof dropoutList[0]);
+					// console.log(typeof partId);
+					// console.log(dropoutList.indexOf(Number(partId)))
+
+					if(!(dropoutList.includes(Number(partId)))){
+						$("#imgO").css("display","");
+						$("#imgO").fadeOut(2000);	
+					}
+				}
+
 			</script>
 
 		</body>
