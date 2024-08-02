@@ -19,7 +19,7 @@
 			<p>방 번호 : ${quizRoom.roomNum}</p>
 			<p>비밀번호 : ${quizRoom.password}</p>
 			<p>오버레이 url : 146.56.102.79:8080/overlay?room=${quizRoom.roomNum}</p>
-			<p>참여 페이지 url : 146.56.102.79:8080/participant</p>
+			<p>참여 페이지 url : https://bit.ly/3zCLngK</p>
 			<div class="outline">
 				<div class="box inner">
 					<div class="subtitle">문제</div>

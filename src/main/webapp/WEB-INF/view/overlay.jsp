@@ -34,7 +34,7 @@
         </div>
         <div id="resultImgBox" style="display: none;">
             <img src="/static/img/goldenbell.png" id="successGoldenBell" style="display: none;">
-            <button id="openResult">공개</button>
+            <button id="openResult"></button>
         </div>
         <audio id="successSrc" src="/static/audio/success.mp3"></audio>
         <audio id="failSrc" src="/static/audio/fail.mp3"></audio>
@@ -89,13 +89,13 @@
                             openParticipantAnswer();
                         } else if (value.includes("openCorrect")) {
                             openQuestionAnswer(message);
-                            updateList(message);
+                            updateList(message,false);
                         } else if (value.includes("consolationmatch")) {
                             consolationMatchList(message);
                         } else if (value.includes("goldenbell")) {
                             changeGoldenBellMode(message);
                         } else if (value.includes("outPlayer")) {
-                            updateList(message);
+                            updateList(message,true);
                         } else if (value.includes("goldenBellResult")) {
                             showGoldenBellResult(message);
                         }
@@ -156,7 +156,8 @@
                 $("#difficulty").text(difficulty);
                 $("#question").html(question);
 
-                $("#Qanswer").css("visibility", "hidden")
+                $(".imgO").css("visibility","hidden");
+                $("#Qanswer").css("visibility", "hidden");
                 $("#Qanswer").text("정답 : " + answer);
                 closeParticipantAnswer();
             }
@@ -165,12 +166,14 @@
                 let elementId = "ptTableElement" + partId;
                 let answerId = "answer" + partId;
                 let imgX = "imgX" + partId;
+                let imgO = "imgO" + partId;
                 let dropout = "dropout" + partId;
                 $("#participantTable").append(
                     $('<div>').prop({
                         id: elementId,
                         className: 'box table-element',
                         innerHTML: '<div class="imgX" id=' + imgX + '></div>'
+                            +'<div class="imgO" id=' + imgO + '></div>'
                             + '<div class="text-center" id="tableTitle">'
                             + partId + '. ' + nickname
                             + '</div><hr>' +
@@ -203,17 +206,24 @@
                 $(partId).text(answer);
             }
 
-            function updateList(message) {
+            function updateList(message, isOut) {
                 let updateListJSON = JSON.parse(message);
                 let list = updateListJSON.list;
+                
+                if(!isOut){
+                    $('.imgO').css("visibility","visible");    
+                }
+                
                 // console.log(list);
                 for (var i = 0; i < list.length; i++) {
-                    let listId = "#ptListElement" + list[i];
-                    let imgX = "#imgX" + list[i]
+                	let listId = "#ptListElement" + list[i];
+                    let imgX = "#imgX" + list[i];
+                    let imgO = "#imgO" + list[i];
                     let dropout = "#dropout" + list[i]
                     //console.log(listId+', '+imgX+', '+dropout);
                     $(listId).css("text-decoration", "line-through");
                     $(imgX).css("visibility", "visible");
+                    $(imgO).css("visibility", "hidden");
                     $(dropout).css("visibility", "visible");
                 }
             }
