@@ -108,7 +108,7 @@ public class QuizRoom {
 	
 	public void removeParticipantToMap(int id) {
 		participantMap.remove(id);
-		currParticipantNum-=1;
+		//currParticipantNum=1;
 	}
 	
 	public List<Integer> CompareAnswer() {

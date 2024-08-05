@@ -19,7 +19,7 @@
 			<p>방 번호 : ${quizRoom.roomNum}</p>
 			<p>비밀번호 : ${quizRoom.password}</p>
 			<p>오버레이 url : 146.56.102.79:8080/overlay?room=${quizRoom.roomNum}</p>
-			<p>참여 페이지 url : https://bit.ly/3zCLngK</p>
+			<p>참여 페이지 url : 146.56.102.79:8080/partLogin</p>
 			<div class="outline">
 				<div class="box inner">
 					<div class="subtitle">문제</div>
@@ -62,7 +62,7 @@
 				<!--참여자 목록-->
 
 				<div class="box inner" id="participantList">
-					<div class="subtitle" id="listTitle">참여자 목록(00/00)</div>
+					<div class="subtitle" id="listTitle">참여자 목록</div>
 					<div class="inline-block">
 						<div class="left">
 							<input type="checkbox" id="toggle" hidden onclick="changeParticipantState()">
@@ -114,6 +114,7 @@
 						stompClient.subscribe("/quiz/consolationmatch");
 						stompClient.subscribe("/quiz/cantgoldenbell");
 						stompClient.send("/app/participation", {}, JSON.stringify(data));
+						stompClient.subscribe("/quiz/outPlayer");
 					}
 
 					socket.onmessage = (event) => {
@@ -134,7 +135,9 @@
 								consolationMatchList(message);
 							} else if(value.includes("cantgoldenbell")){
 								cantGoldenBell(message);
-							}
+							}else if (value.includes("outPlayer")) {
+								deleteList(message);  
+	                        } 
 						}
 					}
 
@@ -193,7 +196,7 @@
 					let participantText = partId + "." + nickname + "<button id='btnOut"+partId+"' onclick='sendOut("+partId+")'>-</button>"
 					participantElement.innerHTML = participantText;
 					participantList.appendChild(participantElement);
-					addCount();
+					//addCount();
 				}
 
 				function changeQuiz(quiz) {
@@ -241,18 +244,29 @@
 					};
 					stompClient.send("/app/out", {}, JSON.stringify(data));
 
-					let id = "#participantListElement"+partId;
-					$(id).remove();
-
+					
+					
 				}
+				
+				function deleteList(message){
+					let deleteJSON = JSON.parse(message);
+					let list = deleteJSON.list;
+					for(var i = 0; i <list.length; i++){
+						let id = "#participantListElement"+list[i];
+						$(id).remove();
+					}
+				}
+				
+				
 
 				function sendMode() {
 					let value = $("input:radio[name='mode']:checked")[0].value;
+					let difficult = $("input:radio[name='targetDifficulty']:checked")[0].value;
 					let data = {
 						"roomNum": roomNum,
 						"partId": "-1",
 						"type": "changeMode",
-						"msg": value
+						"msg": value+";"+difficult
 					};
 					stompClient.send("/app/changeMode", {}, JSON.stringify(data))
 				}
@@ -288,7 +302,7 @@
 						let id = "#participantListElement"+list[i];
 						$(id).css("text-decoration","line-through");
 					}
-					subtractCount(list.length);
+					//subtractCount(list.length);
 				}
 
 				function consolationMatchList(message){
@@ -299,7 +313,7 @@
 						let listId = "#participantListElement"+list[i];
                	    	$(listId).css("text-decoration","none");
 					}
-					instractCount(list.length);
+					//instractCount(list.length);
 				}
 
 				function cantGoldenBell(){

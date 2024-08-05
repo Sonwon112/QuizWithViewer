@@ -36,4 +36,9 @@ public class QuizRoomRepository {
 		return result;
 	}
 	
+	public boolean getPartState(String roomNum) {
+		QuizRoom tmp = findQuizRoomByRoomNum(roomNum);
+		return tmp.isAllowParticipant();
+	}
+	
 }
