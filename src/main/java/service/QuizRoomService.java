@@ -61,7 +61,7 @@ public class QuizRoomService {
 		qr.setCurrMode(mode);
 	}
 	/**
-	 * 
+	 * 참여모드를 활성화/ 비활성화로 변경하는 함수
 	 * @param roomNum
 	 * @param state
 	 */
@@ -70,7 +70,7 @@ public class QuizRoomService {
 		qr.setAllowParticipant(state);
 	}
 	/**
-	 * 
+	 * 최종 참여자를 찾는 함수
 	 * @param roomNum
 	 * @return
 	 */
@@ -84,7 +84,7 @@ public class QuizRoomService {
 	}
 	
 	/**
-	 * 
+	 * 난이도를 수정하는 함수
 	 * @param roomNum
 	 * @param targetDifficulty
 	 */
@@ -93,4 +93,12 @@ public class QuizRoomService {
 		qr.setTargetDifficulty(targetDifficulty);
 	}
 	
+	/**
+	 * 참여 활성화 여부를 얻어오는 함수
+	 * @param roomNum
+	 * @return
+	 */
+	public boolean getPartState(String roomNum) {
+		return repo.getPartState(roomNum);
+	}
 }

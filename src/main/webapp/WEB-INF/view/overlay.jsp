@@ -211,7 +211,8 @@
                 let list = updateListJSON.list;
                 
                 if(!isOut){
-                    $('.imgO').css("visibility","visible");    
+                	$('.imgO').css("visibility","visible");
+                    $('.hidden').css("visibility","hidden");
                 }
                 
                 // console.log(list);
@@ -225,6 +226,7 @@
                     $(imgX).css("visibility", "visible");
                     $(imgO).css("visibility", "hidden");
                     $(dropout).css("visibility", "visible");
+                	$(imgO).addClass("hidden");
                 }
             }
 
@@ -234,7 +236,8 @@
 
             }
             function closeParticipantAnswer() {
-                $(".answer").css("visibility", "hidden");
+                $(".answer").text("");
+            	$(".answer").css("visibility", "hidden");
             }
 
             function openQuestionAnswer(message) {
@@ -247,12 +250,19 @@
                 // console.log(list);
                 for (var i = 0; i < list.length; i++) {
                     let listId = "#ptListElement" + list[i];
-                    let imgX = "#imgX" + list[i]
+                    let imgX = "#imgX" + list[i];
+                    let imgO = "#imgO" + list[i];
                     let dropout = "#dropout" + list[i]
+                    
                     //console.log(listId+', '+imgX+', '+dropout);
                     $(listId).css("text-decoration", "none");
                     $(imgX).css("visibility", "hidden");
                     $(dropout).css("visibility", "hidden");
+                    
+                    if($(imgO).hasClass("hidden")){
+                    	$(imgO).removeClass("hidden");
+                    }
+                    
                 }
             }
             

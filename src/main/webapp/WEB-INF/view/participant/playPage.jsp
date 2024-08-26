@@ -105,6 +105,7 @@
 					// console.log("call sendAnswer")/
 					if (currState == "start") {
 						let answer = $("#answer").val();
+						answer = answer.trim();
 						// console.log("send "+answer);
 
 						let data = {
@@ -116,7 +117,7 @@
 						stompClient.send("/app/submitAnswer", {}, JSON.stringify(data));
 						$("#resultTxt").css("visibility", "visible");
 						$("#resultTxt").css("display", "");
-						$("#resultTxt").fadeOut(3000);
+						$("#resultTxt").fadeOut(5000);
 					}
 
 				}

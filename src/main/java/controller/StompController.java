@@ -91,11 +91,12 @@ public class StompController {
 		log.info("Room : "+dto.getRoomNum()+", member : "+dto.getPartId()+", changeMode : "+dto.getMsg());
 		QuizMode currMode = null;
 		String targetDifficulty = "";
+		String msg[] = dto.getMsg().split(";");
 		
-		switch (dto.getMsg()) {
+		switch (msg[0]) {
 		case "DEFAULT":
 			currMode = QuizMode.DEFAULT;
-			targetDifficulty="하";
+			targetDifficulty=msg[1];
 			break;
 		case "ICEBREAKING":
 			currMode = QuizMode.ICEBREAKING;
@@ -223,8 +224,11 @@ public class StompController {
 	@MessageMapping("/out")
 	@SendTo("/quiz/outPlayer")
 	public String outParticipant(WebSocketDTO dto) {
-		participantService.removePartipant(dto.getRoomNum(), Integer.parseInt(dto.getMsg()));
-		template.convertAndSend("/quiz/out/"+dto.getMsg(),"{\"msg\":\"out\"}");
-		return "{\"msg\":\"openCorrect\",\"list\":["+dto.getMsg()+"]}";
+		if(!qrService.getPartState(dto.getRoomNum())) {
+			participantService.removePartipant(dto.getRoomNum(), Integer.parseInt(dto.getMsg()));
+			template.convertAndSend("/quiz/out/"+dto.getMsg(),"{\"msg\":\"out\"}");
+			return "{\"msg\":\"outPlayer\",\"list\":["+dto.getMsg()+"]}";
+		}
+		return "";
 	}
 }
