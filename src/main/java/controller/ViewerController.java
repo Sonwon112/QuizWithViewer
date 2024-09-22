@@ -19,11 +19,23 @@ public class ViewerController{
 	@Autowired
 	QuizRoomService qrService;
 	
+	/**
+	 * url을 입력해서 로그인 없이 들어가지 못하게 redirect
+	 * @return
+	 */
 	@GetMapping("/partLogin")
 	public String goLoginPage() {
 		return "redirect:/participant";
 	}
 	
+	/**
+	 * 로그인 페이지에서 정보 입력후 로그인 시도 시 호출 되는 Controller 메서드
+	 * @param roomNum 입력된 방번호
+	 * @param password 입력된 비밀번호
+	 * @param participant 입력된 참여자
+	 * @param model 모델
+	 * @return
+	 */
 	@PostMapping("/partLogin")
 	public String Login(@RequestParam String roomNum, @RequestParam String password, Participant participant, Model model) {
 		QuizRoom qr = null;

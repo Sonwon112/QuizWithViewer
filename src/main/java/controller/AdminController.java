@@ -28,11 +28,21 @@ public class AdminController {
 	@Autowired
 	private QuizService qService;
 	
+	/**
+	 * url을 입력해서 방 생성을 제한하기 위한 redirect
+	 * @return
+	 */
 	@GetMapping("/createRoom")
 	public String redirectMain() {
 		return "redirect:/";
 	}
-	
+	/**
+	 * 관리자가 방생성 시 호출되는 Controller
+	 * @param model 모델
+	 * @param password 입력한 방 비밀번호
+	 * @param session 새로고침 시 새로운 방이 생성되지 않게 하기 위해 세션에 저장
+	 * @return
+	 */
 	@PostMapping("/createRoom")
 	public String createRoom(Model model, @RequestParam("password") String password, HttpSession session) {
 //		System.out.println(session.getAttribute("room"));
@@ -64,7 +74,12 @@ public class AdminController {
 		
 		return "admin";
 	}
-	
+	/**
+	 * 파일을 업로드 하고 문제에 데이터를 집어넣는 컨트롤러 메소드
+	 * @param uploadFile
+	 * @param roomNum
+	 * @return
+	 */
 	@PostMapping("/upload")
 	@ResponseBody
 	public String uploadQuiz(MultipartFile[] uploadFile,String roomNum) {

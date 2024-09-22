@@ -41,6 +41,11 @@ public class StompController {
 	@Autowired
 	private SimpMessagingTemplate template;
 	
+	/**
+	 * socket 접속 (admin : -1, overlay : -2, 양수는 시청자 참여자)
+	 * @param dto 
+	 * @return
+	 */
 	@MessageMapping("/participation")
 	@SendTo("/quiz/partParticipant")
 	public String example(WebSocketDTO dto) {
@@ -66,6 +71,11 @@ public class StompController {
 		return result;
 	}
 	
+	/**
+	 * 연결이 끊긴 경우 관리자의 경우 방을 제거 참여자인 경우 참여자 리스트에서 제거
+	 * @param dto
+	 * @param session
+	 */
 	@MessageMapping("/lostConnection")
 	public void LostConnection(WebSocketDTO dto,HttpSession session) {
 		log.info("Room : "+dto.getRoomNum()+", member : "+dto.getPartId()+" "+dto.getMsg());
@@ -77,6 +87,10 @@ public class StompController {
 		participantService.removePartipant(dto.getRoomNum(), dto.getPartId());
 	}
 	
+	/**
+	 * 난이도 변경시 호출되는 Controller 메서드
+	 * @param dto
+	 */
 	@MessageMapping("/changeDifficulty")
 	public void ChangeDifficulty(WebSocketDTO dto) {
 		log.info("Room : "+dto.getRoomNum()+", member : "+dto.getPartId()+", changeDifficulty : "+dto.getMsg());
@@ -86,6 +100,10 @@ public class StompController {
 		}
 	}
 	
+	/**
+	 * 문제 출제 모드 변경시 호출되는 Controller 메서드
+	 * @param dto
+	 */
 	@MessageMapping("/changeMode")
 	public void ChangeMode(WebSocketDTO dto) {
 		log.info("Room : "+dto.getRoomNum()+", member : "+dto.getPartId()+", changeMode : "+dto.getMsg());
@@ -136,12 +154,21 @@ public class StompController {
 		qrService.changeTargetDifficulty(dto.getRoomNum(), targetDifficulty);
 	}
 	
+	/**
+	 * 참여 허용 여부 변경시 호출되는 Controller 메서드
+	 * @param dto
+	 */
 	@MessageMapping("/changeParticipantState")
 	public void ChangeParticipantState(WebSocketDTO dto) {
 		log.info("Room : "+dto.getRoomNum()+", member : "+dto.getPartId()+", changeMode : "+dto.getMsg());
 		qrService.changeParticipantState(dto.getRoomNum(), Boolean.parseBoolean(dto.getMsg()));
 	}
 	
+	/**
+	 * 문제 출제시 호출되는 Controller 메서드
+	 * @param dto
+	 * @return
+	 */
 	@MessageMapping("/selectQuiz")
 	@SendTo("/quiz/selectedQuiz")
 	public String  SelectQuiz(WebSocketDTO dto) {
@@ -156,6 +183,11 @@ public class StompController {
 		return result;
 	}
 	
+	/**
+	 * 문제의 정답을 공개할 때 호출되는 Controller 메서드
+	 * @param dto
+	 * @return
+	 */
 	@MessageMapping("/openCorrect")
 	@SendTo("/quiz/openCorrect")
 	public String OpenCorrect(WebSocketDTO dto) {
@@ -188,6 +220,11 @@ public class StompController {
 		return "{\"msg\":\"openCorrect\",\"list\":"+listToJSON+"}";
 	}
 	
+	/**
+	 * 참여자의 정답을 공개할 때 호출되는 Controller 메서드
+	 * @param dto
+	 * @return
+	 */
 	@MessageMapping("/openAnswer")
 	@SendTo("/quiz/openAnswer")
 	public String OpenAnswer(WebSocketDTO dto) {
@@ -195,6 +232,11 @@ public class StompController {
 		return "{\"msg\":\"openAnswer\"}";
 	}
 	
+	/**
+	 * 타이머 시작 버튼 클릭시 호출되는 Controller 메서드
+	 * @param dto
+	 * @return
+	 */
 	@MessageMapping("/startTimer")
 	@SendTo("/quiz/startTimer")
 	public String StartTimer(WebSocketDTO dto) {
@@ -204,7 +246,11 @@ public class StompController {
 		return "{\"difficulty\":\""+difficulty+"\"}";
 	}
 	
-	
+	/**
+	 * 시청자가 답변을 제출할 때 호출되는 Controller 메서드
+	 * @param dto
+	 * @return
+	 */
 	@MessageMapping("/submitAnswer")
 	@SendTo("/quiz/submittedAnswer")
 	public String submitAnswer(WebSocketDTO dto) {
@@ -214,6 +260,11 @@ public class StompController {
 		return submittedAnswer;
 	}
 	
+	/**
+	 * 관리자가 방을 떠날 때 호출되는 Controller 메서드
+	 * @param dto
+	 * @return
+	 */
 	@MessageMapping("/deleteRoom")
 	@SendTo("/quiz/deleteRoom")
 	public String deleteRoom(WebSocketDTO dto) {
@@ -221,6 +272,11 @@ public class StompController {
 		return "{\"msg\":\"delete\"}";
 	}
 	
+	/**
+	 * 참여자를 내보낼 때 호출되는 Controller 메서드
+	 * @param dto
+	 * @return
+	 */
 	@MessageMapping("/out")
 	@SendTo("/quiz/outPlayer")
 	public String outParticipant(WebSocketDTO dto) {
