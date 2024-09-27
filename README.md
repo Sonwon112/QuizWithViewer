@@ -250,7 +250,10 @@ List<Integer> dropOutParticipant = participantService.CompareAnswer(dto.getRoomN
 }
 ```
 
-→ 관리자 페이지 이미지, 참여 허용중 및 참여자가 들어왔을때 이미지, 문제 출제 시 이미지
+<div style="display:flex;">
+	<img src="https://github.com/user-attachments/assets/b3f93d3a-296e-4608-b267-d91b98a16630" style="width:80%;"></img>
+</div>
+
 
 - 참여자 페이지
 
@@ -392,7 +395,10 @@ public String  SelectQuiz(WebSocketDTO dto) {
 }
 ```
 
-→ 문제가 출제된 참여자 페이지 표시
+<div style="display:flex;">
+	<img src="https://github.com/user-attachments/assets/502c60dd-fe84-443b-ae5d-62a7f1cc070f" style="width:40%;"></img>
+	<img src="https://github.com/user-attachments/assets/e1b55bf2-d60e-44d1-96e7-317b2b1df90c" style="width:40%;"></img>
+</div>
 
 - 송출페이지
 
@@ -454,8 +460,10 @@ function appendElementList(partId, nickname) {
                 );
             }
 ```
-
-→ 아무 참여자가 없는 페이지, 참여 후 페이지
+<div style="display:flex;">
+	<img src="https://github.com/user-attachments/assets/e4c818dc-8797-4aaf-9f8a-8647acd64bd7" style="width:40%;"></img>
+	<img src="https://github.com/user-attachments/assets/c2a4ef9f-dceb-4df5-ada5-ba35b1f0fa02" style="width:40%;"></img>
+</div>
 
  퀴즈쇼를 진행하면서 사용자가 정답을 입력 후 관리자가 답안 공개, 정답 공개시 사용자가 입력한 답안을 공개하고, 문제의 정답을 공개하면서 정답과 오답인지를 표시하였습니다
 
@@ -498,8 +506,12 @@ function openParticipantAnswer() {
 // updateList 표시
 
 ```
+<div style="display:flex;">
+	<img src="https://github.com/user-attachments/assets/6e8c374b-8d9e-4e70-874a-04790a88ab8a" style="width:40%;"/>
+	<img src="https://github.com/user-attachments/assets/eb4ff2a1-a8b8-424b-a338-1fc45b107ee8" style="width:40%;"/>
+</div>
 
-→ 문제 출제 후 페이지, 정답 오답 표시 페이지
+
 
  모든 페이지가 서버에 접속하여 서로 연결되어 정보를 주고 받아야하기 때문에 기존의 웹은 Stateless이기 때문이기에 별도의 Stateful 방식의 통신이 필요한데 Polling은 클라이언트의 요청이 있어야만하기 때문에 송출 페이지와 사용자 페이지에서는 서버에서 문제를 전송하고나 답안을 공개해야할 때 적합하지 않습니다. 양방향 통신이 필요한 경우이기 때문에 SSE보다는 WebSocket 방식이 적합하다고 판단하였고 WebSocket과 STOMP(Simple TextOriented Messaging Protocol)을 활용하였습니다.
 
