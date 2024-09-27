@@ -8,9 +8,10 @@
         <link rel="apple-touch-icon" href="/static/img/favicon.png" />
         <title>도전! 니야 골든벨</title>
         <link href="/static/css/overlay.css" rel="stylesheet" />
+        <link href="/static/css/font.css" rel="stylesheet" />
     </head>
 
-    <body>
+    <body style="background-image: url('/static/img/halloweenBackground.png');background-size:cover;">
         <div id="participantBox">
             <div class="box scroll" id="participantTable">
                 <label></label>

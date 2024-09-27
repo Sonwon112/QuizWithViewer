@@ -1,3 +1,6 @@
+hr{
+	border: solid 0.2px #8B4513;
+}
 .box{
     padding:5px;
     border-radius: 15px;
@@ -17,7 +20,7 @@
 }
 
 .table-element{
-    border:2px solid rgb(70, 71, 18);
+    border:2px solid #8B4513;
     width:30%;
     text-align: center;
     margin:1%;
@@ -55,7 +58,7 @@
     flex-wrap:wrap;
     align-items: start;
     align-content: flex-start;
-    background-color: beige;
+    background-color: #FAC87DAA;
     justify-content: center;
     aspect-ratio: 16/9;
 }
@@ -63,7 +66,7 @@
 #participantList{
     margin:1%;
     width:90%;
-    background-color: beige;
+    background-color: #FAC87DAA;
     height: 63%;
     display:flex;
     flex-direction: column;
@@ -74,7 +77,7 @@
     margin:1% auto;
     width:97%;
     height: 200px;
-    background-color: beige;
+    background-color: #FAC87DAA;
     display: flex;
     align-content: center;
     flex-direction: column;
@@ -104,7 +107,7 @@
     text-align: center;
     line-height: 80px;
     border-radius: 40px;
-    background-color: rgb(164, 166, 82);
+    background-color: #D6864266;
     color:white;
     font-weight: bold;
     font-size: 3em;

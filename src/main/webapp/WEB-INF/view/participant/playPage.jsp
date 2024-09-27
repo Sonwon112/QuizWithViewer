@@ -10,6 +10,7 @@
 			<title>도전! 니야 골든벨</title>
 			<link href="/static/css/admin.css" rel="stylesheet" />
 			<link href="/static/css/player.css" rel="stylesheet" />
+			<link href="/static/css/font.css" rel="stylesheet" />
 		</head>
 
 		<body>

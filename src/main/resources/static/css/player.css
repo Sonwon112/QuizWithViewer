@@ -6,7 +6,7 @@ body{
 
 #background{
     position:absolute;
-    background-image: url("/static/img/tablet.png");
+    background-image: url("/static/img/tablet_halloween.png");
     background-size:cover;
     background-repeat: no-repeat;
     aspect-ratio: 16/9;
@@ -20,6 +20,7 @@ body{
     left:8%;
     top:8%;
     font-weight: bold;
+    color:white;
 }
 
 #questionBox{
@@ -36,7 +37,7 @@ body{
     left:0px;
     width: 80px;
     height: 80px;
-    background-color:rgb(42, 60, 101);
+    background-color:#C2722E	;
     color:white;
     border-radius: 40px;
     line-height: 80px;
@@ -52,6 +53,7 @@ body{
     overflow-y:scroll;
     scrollbar-width: thin;
     scroll-behavior:smooth;
+    color:white;
 }
 
 #inputBox{
@@ -69,6 +71,7 @@ body{
     width: 50%;
     font-size: 1.8em;
     margin-left:8%;
+    color:white;
 }
 #answer:focus{
     outline: none;
@@ -91,6 +94,7 @@ body{
     margin-left: -5%;
     top: 70%;
     font-weight: bold;
+    color:white;
 }
 
 #resultTxt{
@@ -175,8 +179,10 @@ body{
     border-bottom: 1px solid lightgray;
     text-align: center;
     width:33%;
-    font-size:1em
+    font-size:1em;
+    color:white;
 }
+.input-text::placeholder{color:#ffffff77;}
 
 .input-text:focus{
     outline:none;

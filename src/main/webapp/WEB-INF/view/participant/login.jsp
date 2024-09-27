@@ -8,6 +8,7 @@
 		<link rel="apple-touch-icon" href="/static/img/favicon.png" />
 		<title>도전! 니야 골든벨</title>
 		<link href="/static/css/player.css" rel="stylesheet" />
+		<link href="/static/css/font.css" rel="stylesheet"/>
 	</head>
 
 	<body>
@@ -15,17 +16,17 @@
 			<div id="background">
 				<img id="logo" src="/static/img/logo.png">
 				<form id="inputBox" action="/partLogin" method="post">
-					<label>
+					<label style="color:white">
 						방 번호 :
 						<input class="input-text" type="text" name="roomNum" placeholder="방 번호를 입력해주세요" />
 					</label>
 					<br>
-					<label>
+					<label style="color:white">
 						비밀번호 :
 						<input class="input-text" type="password" name="password" placeholder="비밀번호를 입력해주세요" />
 					</label>
 					<br>
-					<label>
+					<label style="color:white">
 						닉네임 :
 						<input class="input-text" type="text" name="nickname" placeholder="채팅창 닉네임과 맞춰주세요" />
 					</label>

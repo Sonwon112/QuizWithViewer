@@ -12,7 +12,7 @@ function startTimer(message){
 
 const setTime = (second)=>{
     //stop();
-    $("#timer").css("color","black");
+    $("#timer").css("color","white");
     currSec = second;
     display(currSec);
 }
@@ -31,7 +31,7 @@ const start = ()=>{
 }
 const stop = ()=>{
     currState="stop";
-    $("#timer").css("color","red");
+    $("#timer").css("color","#FF5555");
     clearInterval(timerInterval);
 }
 const reset =(second)=>{
