@@ -33,6 +33,18 @@ public class Participant {
 	public String getAnswer() {
 		return answer;
 	}
+	public boolean compareAnswer(String currAnswer) {
+		String[] answers = currAnswer.split(",");
+		for(String tmp : answers) {
+			tmp = tmp.trim();
+			if(tmp.equals(answer)) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
 	public void setAnswer(String answer) {
 		this.answer = answer;
 	}

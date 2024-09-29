@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import org.springframework.stereotype.Repository;
 
@@ -18,6 +19,9 @@ import model.QuizRoom;
 
 @Repository
 public class QuizRepository {
+	
+	private static final String[] difficultyArr = {"하", "중", "상"};
+	private Random random = new Random();
 
 	private Map<String, List<Quiz>> quizMap = new HashMap<>();
 
@@ -44,9 +48,17 @@ public class QuizRepository {
 		Quiz q = new Quiz("더 이상 문제가 존재하지 않습니다", "", "");
 
 		ArrayList<Quiz> QList = new ArrayList<Quiz>();
+		
+		
 		try {
 			QList.addAll(
-					qList.stream().filter(v -> !v.isSubmitted()).filter(v -> v.getDifficulty().equals(qr.getTargetDifficulty())).toList());
+					qList.stream().filter(v -> !v.isSubmitted()).filter(v ->{ 
+						String tmp = qr.getTargetDifficulty();
+						if(tmp.equals("랜")) {
+							int index = random.nextInt(3);
+							tmp = difficultyArr[index];
+						}
+						return v.getDifficulty().equals(tmp);}).toList());
 			Collections.shuffle(QList);
 			q = QList.get(0);
 			q.setSubmitted(true);

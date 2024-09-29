@@ -41,6 +41,7 @@
 						<input type="radio" name="targetDifficulty" value="하" onclick="sendDifficulty()" checked="checked"/> 하
 						<input type="radio" name="targetDifficulty" value="중" onclick="sendDifficulty()"/> 중
 						<input type="radio" name="targetDifficulty" value="상" onclick="sendDifficulty()"/> 상
+						<input type="radio" name="targetDifficulty" value="랜" onclick="sendDifficulty()"/> 랜덤
 					</div>
 					<!--문제 출제/답안 공개/정답 공개-->
 					<div class="box quiz">

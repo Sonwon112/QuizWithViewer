@@ -118,7 +118,7 @@ public class QuizRoom {
 			participantMap.forEach((i,p)->{
 				if(!p.isPart()) {
 					p.setPart(true);
-					if(!p.getAnswer().equals(currQuiz.getAnswer())) {
+					if(!p.compareAnswer(currQuiz.getAnswer())) {
 						p.setPart(false);
 						dropOutList.add(p.getPartId());
 					}
@@ -127,7 +127,7 @@ public class QuizRoom {
 			break;
 		default:
 			participantMap.forEach((i,p)->{
-				if(p.isPart() && !p.getAnswer().equals(currQuiz.getAnswer())) {
+				if(p.isPart() && !p.compareAnswer(currQuiz.getAnswer())) {
 					p.setPart(false);
 					dropOutList.add(p.getPartId());
 				}
